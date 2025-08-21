@@ -1,0 +1,14 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+printf "\nRemoving and creating ${_CHERI_MORELLO_RUN_DIR}/\{${_BENCHMARKS[*]}\}\n\n"
+(\
+    IFS=','; \
+    ssh ${_CHERI_MORELLO_CONNECT} "/bin/csh -c \"rm -rf ${_CHERI_MORELLO_RUN_DIR}/{${_BENCHMARKS[*]}}\"" && \
+    ssh ${_CHERI_MORELLO_CONNECT} "/bin/csh -c \"mkdir -p ${_CHERI_MORELLO_RUN_DIR}/{${_BENCHMARKS[*]}}\"" \
+)
+
+for bench in "${_BENCHMARKS[@]}"; do
+    echo "  |.....Distributing ${_SPECCPU_PATH}/${bench}/run/"
+    scp -r ${_SPECCPU_PATH}/${bench}/run/* ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}/${bench}
+done

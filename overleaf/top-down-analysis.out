@@ -1,0 +1,999 @@
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 510.parest_r:
+✓ Top-down analysis validation passed
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✓ Top-level metrics sum to 1.0: 1.000000
+✓ Backend metrics sum to Backend_Bound: 0.370567 = 0.370567
+✓ Memory metrics sum to Memory_Bound: 0.216920 = 0.216920
+✓ Retiring: 0.538121 (non-negative)
+✓ Frontend_Bound: 0.048771 (non-negative)
+✓ Backend_Bound: 0.370567 (non-negative)
+✓ Bad_Speculation: 0.042541 (non-negative)
+✓ Memory_Bound: 0.216920 (non-negative)
+✓ Core_Bound: 0.153647 (non-negative)
+✓ L1_Bound: 0.003446 (non-negative)
+✓ L2_Bound: 0.003093 (non-negative)
+✓ ExtMem_Bound: 0.210382 (non-negative)
+=== CONSISTENCY CHECK PASSED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.6915
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 1413633 (0.3546)
+Core instructions (dp): 1001291 (0.2511)
+Total speculative instructions: 3987062
+Instruction mix sum: 0.6057
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 4526230
+Backend stall cycles: 833868
+WARNING: Memory stalls > backend stalls
+  This suggests:
+    - Cache misses may overlap with other operations
+    - Latency model may overestimate stall cycles
+    - Backend stall counter may not include all memory stalls
+    - Memory operations may be pipelined/hidden
+  The analysis will use instruction mix to validate this
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 5.4280
+Instruction-based memory ratio: 0.3546
+WARNING: Large discrepancy between latency and instruction ratios
+  This suggests:
+    - Latency model overestimates memory stalls
+    - Memory operations are efficient/hidden
+L1 miss rate estimate: 0.9729
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.4229
+  Frontend_Bound: 0.0488
+  Backend_Bound: 0.3706
+  Sum: 0.8422
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 519.lbm_r:
+WARNING: Top-level metrics sum to 1.2554, should be 1.0
+  Retiring: 0.5465
+  Frontend_Bound: 0.0244
+  Backend_Bound: 0.6845
+  Bad_Speculation: 0.0000
+✗ Top-down analysis validation failed - check input data
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✗ Top-level metrics sum to 1.255427, should be 1.0
+✓ Backend metrics sum to Backend_Bound: 0.684523 = 0.684523
+✓ Memory metrics sum to Memory_Bound: 0.562852 = 0.562852
+✓ Retiring: 0.546455 (non-negative)
+✓ Frontend_Bound: 0.024450 (non-negative)
+✓ Backend_Bound: 0.684523 (non-negative)
+✓ Bad_Speculation: 0.000000 (non-negative)
+✓ Memory_Bound: 0.562852 (non-negative)
+✓ Core_Bound: 0.121671 (non-negative)
+✓ L1_Bound: 0.028702 (non-negative)
+✓ L2_Bound: 0.023817 (non-negative)
+✓ ExtMem_Bound: 0.510333 (non-negative)
+=== CONSISTENCY CHECK FAILED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 0.9291
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 414462 (0.2508)
+Core instructions (dp): 89594 (0.0542)
+Total speculative instructions: 1652644
+Instruction mix sum: 0.3050
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 3112138
+Backend stall cycles: 1193303
+WARNING: Memory stalls > backend stalls
+  This suggests:
+    - Cache misses may overlap with other operations
+    - Latency model may overestimate stall cycles
+    - Backend stall counter may not include all memory stalls
+    - Memory operations may be pipelined/hidden
+  The analysis will use instruction mix to validate this
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 2.6080
+Instruction-based memory ratio: 0.2508
+WARNING: Large discrepancy between latency and instruction ratios
+  This suggests:
+    - Latency model overestimates memory stalls
+    - Memory operations are efficient/hidden
+L1 miss rate estimate: 0.9876
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.2323
+  Frontend_Bound: 0.0244
+  Backend_Bound: 0.6845
+  Sum: 0.9412
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 520.omnetpp_r:
+WARNING: Top-level metrics sum to 1.2887, should be 1.0
+  Retiring: 0.5557
+  Frontend_Bound: 0.0547
+  Backend_Bound: 0.6783
+  Bad_Speculation: 0.0000
+✗ Top-down analysis validation failed - check input data
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✗ Top-level metrics sum to 1.288740, should be 1.0
+✓ Backend metrics sum to Backend_Bound: 0.678255 = 0.678255
+✓ Memory metrics sum to Memory_Bound: 0.368159 = 0.368159
+✓ Retiring: 0.555736 (non-negative)
+✓ Frontend_Bound: 0.054749 (non-negative)
+✓ Backend_Bound: 0.678255 (non-negative)
+✓ Bad_Speculation: 0.000000 (non-negative)
+✓ Memory_Bound: 0.368159 (non-negative)
+✓ Core_Bound: 0.310096 (non-negative)
+✓ L1_Bound: 0.015192 (non-negative)
+✓ L2_Bound: 0.027351 (non-negative)
+✓ ExtMem_Bound: 0.325615 (non-negative)
+=== CONSISTENCY CHECK FAILED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 0.5781
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 1009450 (0.3518)
+Core instructions (dp): 850248 (0.2963)
+Total speculative instructions: 2869113
+Instruction mix sum: 0.6482
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 1806166
+Backend stall cycles: 2518634
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.7171
+Instruction-based memory ratio: 0.3518
+WARNING: Large discrepancy between latency and instruction ratios
+  This suggests:
+    - Latency model overestimates memory stalls
+    - Memory operations are efficient/hidden
+L1 miss rate estimate: 0.9739
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.1445
+  Frontend_Bound: 0.0547
+  Backend_Bound: 0.6783
+  Sum: 0.8775
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 523.xalancbmk_r:
+✓ Top-down analysis validation passed
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✓ Top-level metrics sum to 1.0: 1.000000
+✓ Backend metrics sum to Backend_Bound: 0.185399 = 0.185399
+✓ Memory metrics sum to Memory_Bound: 0.086589 = 0.086589
+✓ Retiring: 0.523379 (non-negative)
+✓ Frontend_Bound: 0.152216 (non-negative)
+✓ Backend_Bound: 0.185399 (non-negative)
+✓ Bad_Speculation: 0.139006 (non-negative)
+✓ Memory_Bound: 0.086589 (non-negative)
+✓ Core_Bound: 0.098809 (non-negative)
+✓ L1_Bound: 0.018796 (non-negative)
+✓ L2_Bound: 0.000967 (non-negative)
+✓ ExtMem_Bound: 0.066826 (non-negative)
+=== CONSISTENCY CHECK PASSED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.8136
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 1736739 (0.3233)
+Core instructions (dp): 1981830 (0.3689)
+Total speculative instructions: 5372500
+Instruction mix sum: 0.6921
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 94006
+Backend stall cycles: 529446
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.1776
+Instruction-based memory ratio: 0.3233
+✓ Latency and instruction ratios are consistent
+L1 miss rate estimate: 0.9107
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.4534
+  Frontend_Bound: 0.1522
+  Backend_Bound: 0.1854
+  Sum: 0.7910
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 531.deepsjeng_r:
+✓ Top-down analysis validation passed
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✓ Top-level metrics sum to 1.0: 1.000000
+✓ Backend metrics sum to Backend_Bound: 0.341953 = 0.341953
+✓ Memory metrics sum to Memory_Bound: 0.113434 = 0.113434
+✓ Retiring: 0.540113 (non-negative)
+✓ Frontend_Bound: 0.046765 (non-negative)
+✓ Backend_Bound: 0.341953 (non-negative)
+✓ Bad_Speculation: 0.071169 (non-negative)
+✓ Memory_Bound: 0.113434 (non-negative)
+✓ Core_Bound: 0.228519 (non-negative)
+✓ L1_Bound: 0.005598 (non-negative)
+✓ L2_Bound: 0.005140 (non-negative)
+✓ ExtMem_Bound: 0.102695 (non-negative)
+=== CONSISTENCY CHECK PASSED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.7024
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 1883750 (0.2434)
+Core instructions (dp): 3794931 (0.4903)
+Total speculative instructions: 7740394
+Instruction mix sum: 0.7336
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 277246
+Backend stall cycles: 1332184
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.2081
+Instruction-based memory ratio: 0.2434
+✓ Latency and instruction ratios are consistent
+L1 miss rate estimate: 0.8725
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.4256
+  Frontend_Bound: 0.0468
+  Backend_Bound: 0.3420
+  Sum: 0.8143
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 541.leela_r:
+✓ Top-down analysis validation passed
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✓ Top-level metrics sum to 1.0: 1.000000
+✓ Backend metrics sum to Backend_Bound: 0.239394 = 0.239394
+✓ Memory metrics sum to Memory_Bound: 0.088031 = 0.088031
+✓ Retiring: 0.530910 (non-negative)
+✓ Frontend_Bound: 0.088156 (non-negative)
+✓ Backend_Bound: 0.239394 (non-negative)
+✓ Bad_Speculation: 0.141540 (non-negative)
+✓ Memory_Bound: 0.088031 (non-negative)
+✓ Core_Bound: 0.151363 (non-negative)
+✓ L1_Bound: 0.014567 (non-negative)
+✓ L2_Bound: 0.001532 (non-negative)
+✓ ExtMem_Bound: 0.071931 (non-negative)
+=== CONSISTENCY CHECK PASSED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.4067
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 2848064 (0.2782)
+Core instructions (dp): 4897081 (0.4784)
+Total speculative instructions: 10235969
+Instruction mix sum: 0.7567
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 140984
+Backend stall cycles: 1158584
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.1217
+Instruction-based memory ratio: 0.2782
+✓ Latency and instruction ratios are consistent
+L1 miss rate estimate: 0.9210
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.3517
+  Frontend_Bound: 0.0882
+  Backend_Bound: 0.2394
+  Sum: 0.6792
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 544.nab_r:
+WARNING: Top-level metrics sum to 1.0241, should be 1.0
+  Retiring: 0.5414
+  Frontend_Bound: 0.0178
+  Backend_Bound: 0.4650
+  Bad_Speculation: 0.0000
+✗ Top-down analysis validation failed - check input data
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✗ Top-level metrics sum to 1.024147, should be 1.0
+✓ Backend metrics sum to Backend_Bound: 0.464961 = 0.464961
+✓ Memory metrics sum to Memory_Bound: 0.217614 = 0.217614
+✓ Retiring: 0.541373 (non-negative)
+✓ Frontend_Bound: 0.017813 (non-negative)
+✓ Backend_Bound: 0.464961 (non-negative)
+✓ Bad_Speculation: 0.000000 (non-negative)
+✓ Memory_Bound: 0.217614 (non-negative)
+✓ Core_Bound: 0.247347 (non-negative)
+✓ L1_Bound: 0.030066 (non-negative)
+✓ L2_Bound: 0.005221 (non-negative)
+✓ ExtMem_Bound: 0.182327 (non-negative)
+=== CONSISTENCY CHECK FAILED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.5382
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 1340348 (0.2243)
+Core instructions (dp): 1523481 (0.2550)
+Total speculative instructions: 5975598
+Instruction mix sum: 0.4793
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 222058
+Backend stall cycles: 1622102
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.1369
+Instruction-based memory ratio: 0.2243
+✓ Latency and instruction ratios are consistent
+L1 miss rate estimate: 0.9388
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.3845
+  Frontend_Bound: 0.0178
+  Backend_Bound: 0.4650
+  Sum: 0.8673
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 557.xz_r:
+WARNING: Top-level metrics sum to 1.0913, should be 1.0
+  Retiring: 0.5578
+  Frontend_Bound: 0.0453
+  Backend_Bound: 0.4883
+  Bad_Speculation: 0.0000
+✗ Top-down analysis validation failed - check input data
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✗ Top-level metrics sum to 1.091341, should be 1.0
+✓ Backend metrics sum to Backend_Bound: 0.488253 = 0.488253
+✓ Memory metrics sum to Memory_Bound: 0.165667 = 0.165667
+✓ Retiring: 0.557811 (non-negative)
+✓ Frontend_Bound: 0.045277 (non-negative)
+✓ Backend_Bound: 0.488253 (non-negative)
+✓ Bad_Speculation: 0.000000 (non-negative)
+✓ Memory_Bound: 0.165667 (non-negative)
+✓ Core_Bound: 0.322586 (non-negative)
+✓ L1_Bound: 0.009482 (non-negative)
+✓ L2_Bound: 0.012951 (non-negative)
+✓ ExtMem_Bound: 0.143235 (non-negative)
+=== CONSISTENCY CHECK FAILED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.0917
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 829289 (0.2377)
+Core instructions (dp): 1614785 (0.4628)
+Total speculative instructions: 3488839
+Instruction mix sum: 0.7005
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 459754
+Backend stall cycles: 1134260
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.4053
+Instruction-based memory ratio: 0.2377
+✓ Latency and instruction ratios are consistent
+L1 miss rate estimate: 0.9294
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.2729
+  Frontend_Bound: 0.0453
+  Backend_Bound: 0.4883
+  Sum: 0.8065
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 620.omnetpp_s:
+WARNING: Top-level metrics sum to 1.2937, should be 1.0
+  Retiring: 0.5604
+  Frontend_Bound: 0.0556
+  Backend_Bound: 0.6778
+  Bad_Speculation: 0.0000
+✗ Top-down analysis validation failed - check input data
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✗ Top-level metrics sum to 1.293745, should be 1.0
+✓ Backend metrics sum to Backend_Bound: 0.677771 = 0.677771
+✓ Memory metrics sum to Memory_Bound: 0.367696 = 0.367696
+✓ Retiring: 0.560374 (non-negative)
+✓ Frontend_Bound: 0.055600 (non-negative)
+✓ Backend_Bound: 0.677771 (non-negative)
+✓ Bad_Speculation: 0.000000 (non-negative)
+✓ Memory_Bound: 0.367696 (non-negative)
+✓ Core_Bound: 0.310076 (non-negative)
+✓ L1_Bound: 0.014931 (non-negative)
+✓ L2_Bound: 0.026477 (non-negative)
+✓ ExtMem_Bound: 0.326288 (non-negative)
+=== CONSISTENCY CHECK FAILED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 0.5801
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 993545 (0.3446)
+Core instructions (dp): 837851 (0.2906)
+Total speculative instructions: 2883194
+Instruction mix sum: 0.6352
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 1808458
+Backend stall cycles: 2543728
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.7109
+Instruction-based memory ratio: 0.3446
+WARNING: Large discrepancy between latency and instruction ratios
+  This suggests:
+    - Latency model overestimates memory stalls
+    - Memory operations are efficient/hidden
+L1 miss rate estimate: 0.9735
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.1450
+  Frontend_Bound: 0.0556
+  Backend_Bound: 0.6778
+  Sum: 0.8784
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 623.xalancbmk_s:
+✓ Top-down analysis validation passed
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✓ Top-level metrics sum to 1.0: 1.000000
+✓ Backend metrics sum to Backend_Bound: 0.191443 = 0.191443
+✓ Memory metrics sum to Memory_Bound: 0.089394 = 0.089394
+✓ Retiring: 0.524248 (non-negative)
+✓ Frontend_Bound: 0.142948 (non-negative)
+✓ Backend_Bound: 0.191443 (non-negative)
+✓ Bad_Speculation: 0.141362 (non-negative)
+✓ Memory_Bound: 0.089394 (non-negative)
+✓ Core_Bound: 0.102049 (non-negative)
+✓ L1_Bound: 0.018902 (non-negative)
+✓ L2_Bound: 0.000718 (non-negative)
+✓ ExtMem_Bound: 0.069774 (non-negative)
+=== CONSISTENCY CHECK PASSED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.8301
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 1755268 (0.3228)
+Core instructions (dp): 2003756 (0.3685)
+Total speculative instructions: 5437059
+Instruction mix sum: 0.6914
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 94168
+Backend stall cycles: 548800
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.1716
+Instruction-based memory ratio: 0.3228
+✓ Latency and instruction ratios are consistent
+L1 miss rate estimate: 0.9087
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.4575
+  Frontend_Bound: 0.1429
+  Backend_Bound: 0.1914
+  Sum: 0.7919
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 631.deepsjeng_s:
+✓ Top-down analysis validation passed
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✓ Top-level metrics sum to 1.0: 1.000000
+✓ Backend metrics sum to Backend_Bound: 0.364076 = 0.364076
+✓ Memory metrics sum to Memory_Bound: 0.121964 = 0.121964
+✓ Retiring: 0.536365 (non-negative)
+✓ Frontend_Bound: 0.047602 (non-negative)
+✓ Backend_Bound: 0.364076 (non-negative)
+✓ Bad_Speculation: 0.051957 (non-negative)
+✓ Memory_Bound: 0.121964 (non-negative)
+✓ Core_Bound: 0.242112 (non-negative)
+✓ L1_Bound: 0.005072 (non-negative)
+✓ L2_Bound: 0.005531 (non-negative)
+✓ ExtMem_Bound: 0.111361 (non-negative)
+=== CONSISTENCY CHECK PASSED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.6332
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 2107506 (0.2495)
+Core instructions (dp): 4183640 (0.4952)
+Total speculative instructions: 8448469
+Instruction mix sum: 0.7446
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 375768
+Backend stall cycles: 1624525
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.2313
+Instruction-based memory ratio: 0.2495
+✓ Latency and instruction ratios are consistent
+L1 miss rate estimate: 0.8865
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.4083
+  Frontend_Bound: 0.0476
+  Backend_Bound: 0.3641
+  Sum: 0.8200
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 641.leela_s:
+✓ Top-down analysis validation passed
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✓ Top-level metrics sum to 1.0: 1.000000
+✓ Backend metrics sum to Backend_Bound: 0.240103 = 0.240103
+✓ Memory metrics sum to Memory_Bound: 0.088193 = 0.088193
+✓ Retiring: 0.529560 (non-negative)
+✓ Frontend_Bound: 0.088802 (non-negative)
+✓ Backend_Bound: 0.240103 (non-negative)
+✓ Bad_Speculation: 0.141535 (non-negative)
+✓ Memory_Bound: 0.088193 (non-negative)
+✓ Core_Bound: 0.151910 (non-negative)
+✓ L1_Bound: 0.015257 (non-negative)
+✓ L2_Bound: 0.001400 (non-negative)
+✓ ExtMem_Bound: 0.071536 (non-negative)
+=== CONSISTENCY CHECK PASSED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.4029
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 2869968 (0.2788)
+Core instructions (dp): 4943433 (0.4803)
+Total speculative instructions: 10292555
+Instruction mix sum: 0.7591
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 140236
+Backend stall cycles: 1170534
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.1198
+Instruction-based memory ratio: 0.2788
+✓ Latency and instruction ratios are consistent
+L1 miss rate estimate: 0.9238
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.3507
+  Frontend_Bound: 0.0888
+  Backend_Bound: 0.2401
+  Sum: 0.6796
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 644.nab_s:
+WARNING: Top-level metrics sum to 1.0123, should be 1.0
+  Retiring: 0.5322
+  Frontend_Bound: 0.0179
+  Backend_Bound: 0.4622
+  Bad_Speculation: 0.0000
+✗ Top-down analysis validation failed - check input data
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✗ Top-level metrics sum to 1.012270, should be 1.0
+✓ Backend metrics sum to Backend_Bound: 0.462244 = 0.462244
+✓ Memory metrics sum to Memory_Bound: 0.216311 = 0.216311
+✓ Retiring: 0.532157 (non-negative)
+✓ Frontend_Bound: 0.017869 (non-negative)
+✓ Backend_Bound: 0.462244 (non-negative)
+✓ Bad_Speculation: 0.000000 (non-negative)
+✓ Memory_Bound: 0.216311 (non-negative)
+✓ Core_Bound: 0.245933 (non-negative)
+✓ L1_Bound: 0.030100 (non-negative)
+✓ L2_Bound: 0.005081 (non-negative)
+✓ ExtMem_Bound: 0.181130 (non-negative)
+=== CONSISTENCY CHECK FAILED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.5447
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 1371302 (0.2345)
+Core instructions (dp): 1559094 (0.2666)
+Total speculative instructions: 5847625
+Instruction mix sum: 0.5011
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 224276
+Backend stall cycles: 1570255
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.1428
+Instruction-based memory ratio: 0.2345
+✓ Latency and instruction ratios are consistent
+L1 miss rate estimate: 0.9398
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.3862
+  Frontend_Bound: 0.0179
+  Backend_Bound: 0.4622
+  Sum: 0.8663
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for 657.xz_s:
+WARNING: Top-level metrics sum to 1.0685, should be 1.0
+  Retiring: 0.5311
+  Frontend_Bound: 0.0439
+  Backend_Bound: 0.4935
+  Bad_Speculation: 0.0000
+✗ Top-down analysis validation failed - check input data
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✗ Top-level metrics sum to 1.068491, should be 1.0
+✓ Backend metrics sum to Backend_Bound: 0.493534 = 0.493534
+✓ Memory metrics sum to Memory_Bound: 0.165391 = 0.165391
+✓ Retiring: 0.531054 (non-negative)
+✓ Frontend_Bound: 0.043903 (non-negative)
+✓ Backend_Bound: 0.493534 (non-negative)
+✓ Bad_Speculation: 0.000000 (non-negative)
+✓ Memory_Bound: 0.165391 (non-negative)
+✓ Core_Bound: 0.328144 (non-negative)
+✓ L1_Bound: 0.009539 (non-negative)
+✓ L2_Bound: 0.012908 (non-negative)
+✓ ExtMem_Bound: 0.142944 (non-negative)
+=== CONSISTENCY CHECK FAILED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.0812
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 868063 (0.2630)
+Core instructions (dp): 1722281 (0.5219)
+Total speculative instructions: 3300033
+Instruction mix sum: 0.7849
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 446210
+Backend stall cycles: 1091207
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.4089
+Instruction-based memory ratio: 0.2630
+✓ Latency and instruction ratios are consistent
+L1 miss rate estimate: 0.9279
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.2703
+  Frontend_Bound: 0.0439
+  Backend_Bound: 0.4935
+  Sum: 0.8077
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for LLaMA.cpp-inference:
+✓ Top-down analysis validation passed
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✗ Top-level metrics sum to 1.007845, should be 1.0
+✓ Backend metrics sum to Backend_Bound: 0.499198 = 0.499198
+✓ Memory metrics sum to Memory_Bound: 0.331042 = 0.331042
+✓ Retiring: 0.502838 (non-negative)
+✓ Frontend_Bound: 0.005809 (non-negative)
+✓ Backend_Bound: 0.499198 (non-negative)
+✓ Bad_Speculation: 0.000000 (non-negative)
+✓ Memory_Bound: 0.331042 (non-negative)
+✓ Core_Bound: 0.168156 (non-negative)
+✓ L1_Bound: 0.004601 (non-negative)
+✓ L2_Bound: 0.009844 (non-negative)
+✓ ExtMem_Bound: 0.316597 (non-negative)
+=== CONSISTENCY CHECK FAILED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.8274
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 1846512 (0.2290)
+Core instructions (dp): 937954 (0.1163)
+Total speculative instructions: 8064271
+Instruction mix sum: 0.3453
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 5485710
+Backend stall cycles: 2199106
+WARNING: Memory stalls > backend stalls
+  This suggests:
+    - Cache misses may overlap with other operations
+    - Latency model may overestimate stall cycles
+    - Backend stall counter may not include all memory stalls
+    - Memory operations may be pipelined/hidden
+  The analysis will use instruction mix to validate this
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 2.4945
+Instruction-based memory ratio: 0.2290
+WARNING: Large discrepancy between latency and instruction ratios
+  This suggests:
+    - Latency model overestimates memory stalls
+    - Memory operations are efficient/hidden
+L1 miss rate estimate: 0.9744
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.4568
+  Frontend_Bound: 0.0058
+  Backend_Bound: 0.4992
+  Sum: 0.9619
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for LLaMA.cpp-matmult:
+✓ Top-down analysis validation passed
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✓ Top-level metrics sum to 1.0: 1.000000
+✓ Backend metrics sum to Backend_Bound: 0.294097 = 0.294097
+✓ Memory metrics sum to Memory_Bound: 0.210837 = 0.210837
+✓ Retiring: 0.545566 (non-negative)
+✓ Frontend_Bound: 0.015823 (non-negative)
+✓ Backend_Bound: 0.294097 (non-negative)
+✓ Bad_Speculation: 0.144514 (non-negative)
+✓ Memory_Bound: 0.210837 (non-negative)
+✓ Core_Bound: 0.083260 (non-negative)
+✓ L1_Bound: 0.019955 (non-negative)
+✓ L2_Bound: 0.001774 (non-negative)
+✓ ExtMem_Bound: 0.189108 (non-negative)
+=== CONSISTENCY CHECK PASSED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 2.3065
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 5913649 (0.2457)
+Core instructions (dp): 2335330 (0.0970)
+Total speculative instructions: 24067727
+Instruction mix sum: 0.3427
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 1280962
+Backend stall cycles: 3033055
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.4223
+Instruction-based memory ratio: 0.2457
+✓ Latency and instruction ratios are consistent
+L1 miss rate estimate: 0.9838
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.5766
+  Frontend_Bound: 0.0158
+  Backend_Bound: 0.2941
+  Sum: 0.8865
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for SQLite-Bench:
+✓ Top-down analysis validation passed
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✓ Top-level metrics sum to 1.0: 1.000000
+✓ Backend metrics sum to Backend_Bound: 0.248541 = 0.248541
+✓ Memory metrics sum to Memory_Bound: 0.111886 = 0.111886
+✓ Retiring: 0.524584 (non-negative)
+✓ Frontend_Bound: 0.152745 (non-negative)
+✓ Backend_Bound: 0.248541 (non-negative)
+✓ Bad_Speculation: 0.074130 (non-negative)
+✓ Memory_Bound: 0.111886 (non-negative)
+✓ Core_Bound: 0.136655 (non-negative)
+✓ L1_Bound: 0.008469 (non-negative)
+✓ L2_Bound: 0.003712 (non-negative)
+✓ ExtMem_Bound: 0.099705 (non-negative)
+=== CONSISTENCY CHECK PASSED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.5795
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 447781 (0.3298)
+Core instructions (dp): 546912 (0.4028)
+Total speculative instructions: 1357833
+Instruction mix sum: 0.7326
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 198960
+Backend stall cycles: 197428
+WARNING: Memory stalls > backend stalls
+  This suggests:
+    - Cache misses may overlap with other operations
+    - Latency model may overestimate stall cycles
+    - Backend stall counter may not include all memory stalls
+    - Memory operations may be pipelined/hidden
+  The analysis will use instruction mix to validate this
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 1.0078
+Instruction-based memory ratio: 0.3298
+WARNING: Large discrepancy between latency and instruction ratios
+  This suggests:
+    - Latency model overestimates memory stalls
+    - Memory operations are efficient/hidden
+L1 miss rate estimate: 0.8828
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.3949
+  Frontend_Bound: 0.1527
+  Backend_Bound: 0.2485
+  Sum: 0.7962
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+
+Validating results for QuickJS:
+✓ Top-down analysis validation passed
+
+=== MATHEMATICAL CONSISTENCY CHECK ===
+✓ Top-level metrics sum to 1.0: 1.000000
+✓ Backend metrics sum to Backend_Bound: 0.283174 = 0.283174
+✓ Memory metrics sum to Memory_Bound: 0.114674 = 0.114674
+✓ Retiring: 0.535310 (non-negative)
+✓ Frontend_Bound: 0.093926 (non-negative)
+✓ Backend_Bound: 0.283174 (non-negative)
+✓ Bad_Speculation: 0.087590 (non-negative)
+✓ Memory_Bound: 0.114674 (non-negative)
+✓ Core_Bound: 0.168500 (non-negative)
+✓ L1_Bound: 0.011250 (non-negative)
+✓ L2_Bound: 0.006149 (non-negative)
+✓ ExtMem_Bound: 0.097275 (non-negative)
+=== CONSISTENCY CHECK PASSED ===
+
+
+=== DIAGNOSTIC INFORMATION ===
+IPC: 1.6124
+
+=== INSTRUCTION MIX ANALYSIS ===
+Memory instructions (ld+st): 650836 (0.2879)
+Core instructions (dp): 956328 (0.4231)
+Total speculative instructions: 2260242
+Instruction mix sum: 0.7111
+WARNING: Low instruction mix coverage - missing instruction types
+CLASSIFICATION: Balanced workload
+
+=== MEMORY STALL ANALYSIS ===
+Calculated memory stall cycles: 117710
+Backend stall cycles: 345611
+
+=== CROSS-VALIDATION ===
+Latency-based memory ratio: 0.3406
+Instruction-based memory ratio: 0.2879
+✓ Latency and instruction ratios are consistent
+L1 miss rate estimate: 0.8524
+
+=== TOP-LEVEL METRICS ===
+  Retiring: 0.4031
+  Frontend_Bound: 0.0939
+  Backend_Bound: 0.2832
+  Sum: 0.7802
+=== END DIAGNOSTIC ===
+
+WARNING: Memory_Bound + Core_Bound != Backend_Bound
+WARNING: Memory_Bound + Core_Bound != Backend_Bound

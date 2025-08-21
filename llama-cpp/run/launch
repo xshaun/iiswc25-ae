@@ -1,0 +1,18 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+for _type in "raw" "matmult"; do
+    for run_folder in "${RUN_FOLDERS[@]}"; do
+        echo "Launching ${run_folder} ${_type}"
+        ssh ${_CHERI_MORELLO_CONNECT_ROOT} "rm -rf ${_CHERI_MORELLO_RUN_DIR}/${run_folder}/results_${_type}"
+        ssh ${_CHERI_MORELLO_CONNECT_ROOT} "mkdir -p ${_CHERI_MORELLO_RUN_DIR}/${run_folder}/results_${_type}"
+
+        ssh ${_CHERI_MORELLO_CONNECT_ROOT} \
+            "cd ${_CHERI_MORELLO_RUN_DIR}/${run_folder} && ./_launch_pmcstat_${_type}"
+        
+        mkdir -p ${_PROJECT_ROOT}/${_RESULTS_FOLDER}/${run_folder}/
+        scp -r ${_CHERI_MORELLO_CONNECT_ROOT}:${_CHERI_MORELLO_RUN_DIR}/${run_folder}/results_${_type} \
+            ${_PROJECT_ROOT}/${_RESULTS_FOLDER}/${run_folder}/
+        ssh ${_CHERI_MORELLO_CONNECT_ROOT} "rm -rf ${_CHERI_MORELLO_RUN_DIR}/${run_folder}/results_${_type}/pmcstat.S*"
+    done
+done

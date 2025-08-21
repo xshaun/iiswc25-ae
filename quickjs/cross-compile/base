@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Path & Variables
+_QUICKJS_PATH="/home/iiswc/workspace/quickjs"
+_CONFIGS_FOLDER="/home/iiswc/workspace/workload-characterization-on-morello/configs"
+_CHERI_PURECAP_CFG="${_CONFIGS_FOLDER}/cheribsd-morello-purecap.cfg"
+_CHERI_HYBRID_CFG="${_CONFIGS_FOLDER}/cheribsd-morello-hybrid.cfg"
+_CHERI_BENCHMARK_CFG="${_CONFIGS_FOLDER}/cheribsd-morello-purecap-benchmark.cfg"
+
+# set environment variables
+LLVM_DIR="/home/iiswc/cheri/build/morello-llvm-project-build"
+LIBRARY_PATH=${LLVM_DIR}/lib:${LLVM_DIR}/lib32:${LIBRARY_PATH}  
+LD_LIBRARY_PATH=${LLVM_DIR}/lib:${LLVM_DIR}/lib32:${LD_LIBRARY_PATH}
+C_INCLUDE_PATH=${LLVM_DIR}/include:${C_INCLUDE_PATH}
+CPLUS_INCLUDE_PATH=${LLVM_DIR}/include:${CPLUS_INCLUDE_PATH}
+
+export CPATH=${_QUICKJS_PATH}:${CPATH} 
+
+# Function to safely change directory
+safe_cd() {
+    cd "$1" || { echo "Failed to change to directory: $1"; exit 1; }
+}
+
+# morello
+_CHERI_MORELLO_CONNECT_IP=${1:-192.168.1.102}
+_CHERI_MORELLO_CONNECT="iiswc@${_CHERI_MORELLO_CONNECT_IP}"
+_CHERI_MORELLO_CONNECT_ROOT="root@${_CHERI_MORELLO_CONNECT_IP}"
+_CHERI_MORELLO_RUN_DIR="/home/iiswc/quickjs"

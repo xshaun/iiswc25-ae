@@ -1,0 +1,14 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+scp -r ${_LLAMA_CPP_PATH}/build-cheribsd-morello-purecap ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}
+scp -r ${_LLAMA_CPP_PATH}/build-cheribsd-morello-purecap-benchmark ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}
+scp -r ${_LLAMA_CPP_PATH}/build-cheribsd-morello-hybrid ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}
+
+ssh ${_CHERI_MORELLO_CONNECT} "cd ${_CHERI_MORELLO_RUN_DIR} && mkdir -p models/7B/"
+
+# 3.8 GB: wget https://huggingface.co/Kquant03/Hippolyta-7B-GGUF/resolve/main/ggml-model-q4_0.gguf
+# 7.5 GB: wget https://huggingface.co/Kquant03/Hippolyta-7B-GGUF/resolve/main/ggml-model-q8_0.gguf
+
+ssh ${_CHERI_MORELLO_CONNECT} "cd ${_CHERI_MORELLO_RUN_DIR}/models/7B/ && if [ ! -f ggml-model-q4_0.gguf ]; then wget https://huggingface.co/Kquant03/Hippolyta-7B-GGUF/resolve/main/ggml-model-q4_0.gguf; fi "
+ssh ${_CHERI_MORELLO_CONNECT} "cd ${_CHERI_MORELLO_RUN_DIR}/models/7B/ && if [ ! -f ggml-model-q8_0.gguf ]; then wget https://huggingface.co/Kquant03/Hippolyta-7B-GGUF/resolve/main/ggml-model-q8_0.gguf; fi "

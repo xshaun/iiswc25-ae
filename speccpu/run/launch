@@ -1,0 +1,27 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+if [[ $1 == 'all' ]]; then
+    _RUNNABLE_BENCHMARKS=("${RUNNABLE_BENCHMARKS[@]}")
+else
+    if [[ ! " ${RUNNABLE_BENCHMARKS[@]} " =~ " $1 " ]]; then
+        echo "Benchmark $1 not found"
+        exit 1
+    fi
+    _RUNNABLE_BENCHMARKS=("$1")
+fi
+
+echo "Running runnable benchmarks: ${_RUNNABLE_BENCHMARKS[@]}"
+
+for bench in "${_RUNNABLE_BENCHMARKS[@]}"; do
+    for runnable_label in "${RUNNABLE_LABELS[@]}"; do
+        echo "  |..... launching ${bench} on ${runnable_label}"
+        /bin/bash -c "ssh ${_CHERI_MORELLO_CONNECT_ROOT} rm -rf ${_CHERI_MORELLO_RUN_DIR}/${bench}/${runnable_label}/*pmcstat*.{out,gmon}"
+        ssh ${_CHERI_MORELLO_CONNECT_ROOT} \
+          "cd ${_CHERI_MORELLO_RUN_DIR}/${bench}/${runnable_label} && ./_launch_pmcstat > _launch_pmcstat.out 2>&1" && \
+        mkdir -p ${_PROJECT_ROOT}/${_RESULTS_FOLDER}/${bench}/${runnable_label}/ && \
+        /bin/bash -c "scp ${_CHERI_MORELLO_CONNECT_ROOT}:${_CHERI_MORELLO_RUN_DIR}/${bench}/${runnable_label}/pmcstat.*.{out,gmon} \
+            ${_PROJECT_ROOT}/${_RESULTS_FOLDER}/${bench}/${runnable_label}/ && \
+            ssh ${_CHERI_MORELLO_CONNECT_ROOT} rm -rf ${_CHERI_MORELLO_RUN_DIR}/${bench}/${runnable_label}/pmcstat.S*.out"
+    done
+done

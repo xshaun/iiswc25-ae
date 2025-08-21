@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Path & Variables
+_PROJECT_ROOT="/home/iiswc/workspace/workload-characterization-on-morello"
+_MATRIX_MULTIPLY_PATH="/home/iiswc/workspace/matrix-multiply"
+
+# morello
+_CHERI_MORELLO_CONNECT_IP=${1:-192.168.1.101}
+_CHERI_MORELLO_CONNECT="iiswc@${_CHERI_MORELLO_CONNECT_IP}"
+_CHERI_MORELLO_CONNECT_ROOT="root@${_CHERI_MORELLO_CONNECT_IP}"
+_CHERI_MORELLO_RUN_DIR="/home/iiswc/matrix-multiply"
+
+RUN_FOLDERS=("build-cheribsd-morello-hybrid" "build-cheribsd-morello-purecap" "build-cheribsd-morello-purecap-benchmark")
+BINARY_NAMES=("multiply-bench-O0" "multiply-bench-O1" "multiply-bench-O2" "multiply-bench-O3")
+
+# project and expertiment results
+_RESULTS_FOLDER="${2:-results/matrix-multiply}"

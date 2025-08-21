@@ -1,0 +1,28 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+declare -A FILTERS=(
+    ["cheribsd-morello-hybrid-cheribuild_llvm"]="'A64, version 1 (FreeBSD)'"
+    ["cheribsd-morello-purecap-benchmark-cheribuild_llvm"]="'pure-capability benchmark ABI'"
+    ["cheribsd-morello-purecap-cheribuild_llvm"]="'C64, CheriABI, version 1 (SYSV)'"
+);
+
+rm -f /tmp/spec_run_readelf
+
+for bench in "${RUNNABLE_BENCHMARKS[@]}"; do
+    for label in "${LABELS[@]}"; do
+        for size in "${SIZES[@]}"; do
+            run_folder="run_base_${size}_${label}.0000"
+            binary_name="*_base.${label}"
+            
+            SECTIONS="\.bss|\.comment|\.data|\.data\.rel\.ro|\.debug_abbrev|\.debug_aranges|\.debug_info|\.debug_line|\.debug_loc|\.debug_ranges|\.debug_str|\.dynamic|\.dynstr|\.dynsym|\.eh_frame|\.eh_frame_hdr|\.fini|\.fini_array|\.gnu\.hash|\.gnu\.version|\.gnu\.version_r|\.got|\.got\.plt|\.hash|\.init|\.init_array|\.interp|\.jcr|\.note\.cheri|\.note\.tag|\.plt|\.rela\.dyn|\.rela\.plt|\.rodata|\.shstrtab|\.strtab|\.symtab|\.text"
+
+            command="readelf -W -S ${_CHERI_MORELLO_RUN_DIR}/${bench}/${run_folder}/${binary_name} | grep -E '${SECTIONS}' | awk '{print substr(\\\$0, 7)}' | awk '{printf \\\$1 \\\" %d\n\\\", \\\"0x\\\" \\\$5}' > /tmp/spec_run_readelf_${bench}_${size}_${label}"
+            
+            echo ssh ${_CHERI_MORELLO_CONNECT} "\"${command} \"" >> /tmp/spec_run_readelf
+        done
+    done
+done
+
+/bin/bash /tmp/spec_run_readelf && \
+echo "Done"

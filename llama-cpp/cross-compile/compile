@@ -1,0 +1,107 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+set -euo pipefail
+
+# Function to safely change directory
+safe_cd() {
+    cd "$1" || { echo "Failed to change to directory: $1"; exit 1; }
+}
+safe_mkdir() {
+    if [ -d "${_LLAMA_CPP_PATH}/$1" ]; then
+        rm -rf "${_LLAMA_CPP_PATH}/$1"
+    fi
+    mkdir -p "${_LLAMA_CPP_PATH}/$1" || { echo "Failed to create directory: $1"; exit 1; }
+}
+
+# Create toolchain file
+TOOLCHAIN_FILE="${_LLAMA_CPP_PATH}/aarch64-freebsd-toolchain.cmake"
+cat > "${TOOLCHAIN_FILE}" << 'EOF'
+set(CMAKE_SYSTEM_NAME FreeBSD)
+set(CMAKE_SYSTEM_PROCESSOR aarch64)
+set(CMAKE_SYSTEM_VERSION 13)
+
+# Specify the cross compilers
+set(CMAKE_C_COMPILER "/home/iiswc/cheri/build/morello-llvm-project-build/bin/clang")
+set(CMAKE_CXX_COMPILER "/home/iiswc/cheri/build/morello-llvm-project-build/bin/clang++")
+
+# Where is the target environment
+set(CMAKE_FIND_ROOT_PATH "/home/iiswc/cheri/output/rootfs-morello-purecap")
+
+# Search for programs in the build host directories
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+# Search for libraries and headers in the target directories
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+# Set target architecture
+set(CMAKE_C_COMPILER_TARGET "aarch64-unknown-freebsd13")
+set(CMAKE_CXX_COMPILER_TARGET "aarch64-unknown-freebsd13")
+
+# Set default ABI flags
+set(CMAKE_C_FLAGS_INIT "-target aarch64-unknown-freebsd13 -mcpu=rainier -march=morello")
+set(CMAKE_CXX_FLAGS_INIT "-target aarch64-unknown-freebsd13 -mcpu=rainier -march=morello")
+
+# Set default sysroot
+set(CMAKE_SYSROOT "/home/iiswc/cheri/output/rootfs-morello-purecap")
+EOF
+
+
+# folder
+safe_cd "${_LLAMA_CPP_PATH}"
+if [ -f CMakeCache.txt ]; then
+    rm CMakeCache.txt
+fi
+if [ -d CMakeFiles ]; then
+    rm -rf CMakeFiles
+fi
+safe_mkdir build-cheribsd-morello-purecap
+safe_mkdir build-cheribsd-morello-purecap-benchmark
+safe_mkdir build-cheribsd-morello-hybrid
+
+# Manual copy Makefile
+cp ${_CONFIGS_FOLDER}/../llama-cpp/Makefile ${_LLAMA_CPP_PATH}/ || { echo "Failed to copy Makefile"; exit 1; }
+
+# Common CMake options
+CMAKE_COMMON_OPTS=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DLLAMA_CURL=OFF
+    -DGGML_CCACHE=OFF
+    -DLLAMA_NATIVE=OFF
+    -DCMAKE_C_FLAGS_RELEASE="-O3 -DNDEBUG"
+    -DCMAKE_CXX_FLAGS_RELEASE="-O3 -DNDEBUG"
+    -DLLAMA_ARM_NEON=ON
+    -DGGML_SYSTEM_ARCH=aarch64
+    -DCMAKE_TOOLCHAIN_FILE="${TOOLCHAIN_FILE}"
+)
+
+# purecap
+RPATH_FLAGS="-Wl,-rpath,/home/iiswc/llama-cpp/build-cheribsd-morello-purecap/src/ \
+         -Wl,-rpath,/home/iiswc/llama-cpp/build-cheribsd-morello-purecap/ggml/src/"
+safe_cd "${_LLAMA_CPP_PATH}/build-cheribsd-morello-purecap"
+cmake .. "${CMAKE_COMMON_OPTS[@]}" \
+    -DCMAKE_C_FLAGS="-std=c99 --config ${_CHERI_PURECAP_CFG} ${RPATH_FLAGS}" \
+    -DCMAKE_CXX_FLAGS="-std=c++03 --config ${_CHERI_PURECAP_CFG} ${RPATH_FLAGS}"
+cmake --build . --config Release -j 8
+
+# purecap-benchmark
+RPATH_FLAGS="-Wl,-rpath,/home/iiswc/llama-cpp/build-cheribsd-morello-purecap-benchmark/src/ \
+         -Wl,-rpath,/home/iiswc/llama-cpp/build-cheribsd-morello-purecap-benchmark/ggml/src/"
+safe_cd "${_LLAMA_CPP_PATH}/build-cheribsd-morello-purecap-benchmark"
+cmake .. "${CMAKE_COMMON_OPTS[@]}" \
+    -DCMAKE_C_FLAGS="-std=c99 --config ${_CHERI_BENCHMARK_CFG} ${RPATH_FLAGS}" \
+    -DCMAKE_CXX_FLAGS="-std=c++03 --config ${_CHERI_BENCHMARK_CFG} ${RPATH_FLAGS}" 
+cmake --build . --config Release -j 8
+
+# hybrid
+RPATH_FLAGS="-Wl,-rpath,/home/iiswc/llama-cpp/build-cheribsd-morello-hybrid/src/ \
+         -Wl,-rpath,/home/iiswc/llama-cpp/build-cheribsd-morello-hybrid/ggml/src/"
+safe_cd "${_LLAMA_CPP_PATH}/build-cheribsd-morello-hybrid"
+cmake .. "${CMAKE_COMMON_OPTS[@]}" \
+    -DCMAKE_C_FLAGS="-std=c99 --config ${_CHERI_HYBRID_CFG} ${RPATH_FLAGS}" \
+    -DCMAKE_CXX_FLAGS="-std=c++03 --config ${_CHERI_HYBRID_CFG} ${RPATH_FLAGS}"
+cmake --build . --config Release -j 8
+
+# finish
+safe_cd "${_LLAMA_CPP_PATH}"
+echo "All builds completed successfully!"

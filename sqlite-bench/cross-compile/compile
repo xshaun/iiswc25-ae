@@ -1,0 +1,30 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+set -e          # exit on any command failure
+set -o pipefail # catch errors in pipelines
+set -x          # (optional) echo commands as they run
+
+safe_cd "${_SQLITE_BENCH_PATH}"
+# cp ${_CONFIGS_FOLDER}/../sqlite-bench/Makefile ${_SQLITE_BENCH_PATH}
+
+export CC=${LLVM_DIR}/bin/clang
+export CPATH=${_SQLITE_BENCH_PATH}:${CPATH}
+
+declare -A FILTERS=(
+    ["purecap"]="${_CHERI_PURECAP_CFG}"
+    ["hybrid"]="${_CHERI_HYBRID_CFG}"
+    ["purecap-benchmark"]="${_CHERI_BENCHMARK_CFG}"
+);
+
+for abi in purecap purecap-benchmark hybrid; do
+    rm -rf ${_SQLITE_BENCH_PATH}/build-cheribsd-morello-${abi}
+
+    RPATH_FLAGS="-Wl,-rpath,/home/iiswc/sqlite-bench/build-cheribsd-morello-${abi}/"
+    CFLAGS="-Wall -I. -O3 -DNDEBUG  -std=c99 --config ${FILTERS[$abi]} ${RPATH_FLAGS}"
+
+    _PREFIX="PREFIX=${_SQLITE_BENCH_PATH}/build-cheribsd-morello-${abi}"
+
+    #make clean ${_PREFIX} && \
+    #make ${_PREFIX} CC="${CC}" "CFLAGS=${CFLAGS}" -j 8 
+    echo "compiled binaries in binaries folder"
+done

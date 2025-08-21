@@ -1,0 +1,110 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+cat <<EOF > _launch_pmcstat
+cd "\$(dirname "\$0")"
+
+mkdir -p results && \
+cp ./_launch ./_launch_O ./results/ && \
+cd ./results && \
+rm -rf ./*pmcstat*.out ./*pmcstat*.gmon && \
+rm -rf multiply-bench-O*.out && \
+chmod +x ./_launch ./_launch_O
+
+./_launch_O && sleep 15 && \
+time ./_launch_O > pmcstat.timing.O.out 2>&1 && sleep 15
+
+./_launch && sleep 15 && \
+time ./_launch > pmcstat.timing.out 2>&1 && sleep 15
+
+pmcstat -d -P INST_RETIRED \
+  -P CPU_CYCLES \
+  -P STALL_BACKEND \
+  -P STALL_FRONTEND \
+  -P INST_SPEC \
+  -P ASE_SPEC \
+  -O pmcstat.S1.out -- ./_launch && sleep 15 && \
+  pmcstat -R pmcstat.S1.out -G pmcstat.S1.gmon && sleep 10
+
+pmcstat -d -P BR_RETIRED \
+  -P BR_MIS_PRED_RETIRED \
+  -P BR_INDIRECT_SPEC \
+  -P BR_RETURN_SPEC \
+  -P BR_IMMED_SPEC \
+  -O pmcstat.S2.out -- ./_launch && sleep 15 && \
+  pmcstat -R pmcstat.S2.out -G pmcstat.S2.gmon && sleep 10  
+
+pmcstat -d -P ITLB_WALK \
+  -P L1I_TLB_REFILL \
+  -P L1I_TLB \
+  -P L1I_CACHE \
+  -P L1I_CACHE_REFILL \
+  -P VFP_SPEC \
+  -O pmcstat.S3.out -- ./_launch && sleep 15 && \
+  pmcstat -R pmcstat.S3.out -G pmcstat.S3.gmon && sleep 10
+
+pmcstat -d -P DTLB_WALK \
+  -P L1D_TLB \
+  -P L1D_TLB_REFILL \
+  -P L2D_TLB \
+  -P L2D_TLB_REFILL \
+  -P CRYPTO_SPEC \
+  -O pmcstat.S4.out -- ./_launch && sleep 15 && \
+  pmcstat -R pmcstat.S4.out -G pmcstat.S4.gmon && sleep 10
+
+pmcstat -d -P L1D_CACHE \
+  -P L1D_CACHE_RD \
+  -P L1D_CACHE_REFILL \
+  -P L1D_CACHE_WR \
+  -P LL_CACHE_MISS_RD \
+  -P LL_CACHE_RD \
+  -O pmcstat.S5.out -- ./_launch && sleep 15 && \
+  pmcstat -R pmcstat.S5.out -G pmcstat.S5.gmon && sleep 10
+
+pmcstat -d -P L2D_CACHE \
+  -P L2D_CACHE_RD \
+  -P L2D_CACHE_REFILL \
+  -P L2D_CACHE_ALLOCATE \
+  -P L2D_CACHE_WR \
+  -O pmcstat.S6.out -- ./_launch && sleep 15 && \
+  pmcstat -R pmcstat.S6.out -G pmcstat.S6.gmon && sleep 10
+
+pmcstat -d -P MEM_ACCESS \
+  -P MEM_ACCESS_RD \
+  -P MEM_ACCESS_WR \
+  -P LD_SPEC \
+  -P ST_SPEC \
+  -P DP_SPEC \
+  -O pmcstat.S7.out -- ./_launch && sleep 15 && \
+  pmcstat -R pmcstat.S7.out -G pmcstat.S7.gmon && sleep 10
+
+pmcstat -d -P MEM_ACCESS_RD_CTAG \
+  -P MEM_ACCESS_WR_CTAG \
+  -P CAP_MEM_ACCESS_RD \
+  -P CAP_MEM_ACCESS_WR \
+  -O pmcstat.S8.out -- ./_launch &&
+  pmcstat -R pmcstat.S8.out -G pmcstat.S8.gmon && sleep 10
+EOF
+
+cat <<EOF > _launch_O
+script -q temp.out ../multiply-bench-O0 && cat temp.out >> multiply-bench-O0.out && rm temp.out
+script -q temp.out ../multiply-bench-O1 && cat temp.out >> multiply-bench-O1.out && rm temp.out
+script -q temp.out ../multiply-bench-O2 && cat temp.out >> multiply-bench-O2.out && rm temp.out
+script -q temp.out ../multiply-bench-O3 && cat temp.out >> multiply-bench-O3.out && rm temp.out
+EOF
+
+cat <<EOF > _launch
+../multiply-bench-O3 > /dev/null 2>&1
+EOF
+
+chmod +x _launch _launch_pmcstat _launch_O
+
+cp _launch _launch_pmcstat _launch_O ${_MATRIX_MULTIPLY_PATH}/build-cheribsd-morello-purecap
+cp _launch _launch_pmcstat _launch_O ${_MATRIX_MULTIPLY_PATH}/build-cheribsd-morello-purecap-benchmark
+cp _launch _launch_pmcstat _launch_O ${_MATRIX_MULTIPLY_PATH}/build-cheribsd-morello-hybrid
+
+rm -rf _launch _launch_pmcstat _launch_O
+
+
+
+

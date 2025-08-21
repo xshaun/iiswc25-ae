@@ -1,0 +1,187 @@
+#!/bin/bash
+PROJECT_ROOT="/home/iiswc/workspace/workload-characterization-on-morello"
+LOG_DIR="${PROJECT_ROOT}/results/quickjs/"
+
+
+# Define the metrics we want to track
+declare -a metric_names=(
+    "inst_retired"
+    "cpu_cycles"
+    "stall_backend"
+    "stall_frontend"
+    "inst_spec"
+    "ase_spec"
+    "br_retired"
+    "br_mis_pred_retired"
+    "br_indirect_spec"
+    "br_return_spec"
+    "br_immed_spec"
+    "itlb_walk"
+    "l1i_tlb_refill"
+    "l1i_tlb"
+    "l1i_cache"
+    "l1i_cache_refill"
+    "vfp_spec"
+    "dtlb_walk"
+    "l1d_tlb"
+    "l1d_tlb_refill"
+    "l2d_tlb"
+    "l2d_tlb_refill"
+    "crypto_spec"
+    "l1d_cache"
+    "l1d_cache_rd"
+    "l1d_cache_refill"
+    "l1d_cache_wr"
+    "ll_cache_miss_rd"
+    "ll_cache_rd"
+    "l2d_cache"
+    "l2d_cache_rd"
+    "l2d_cache_refill"
+    "l2d_cache_allocate"
+    "l2d_cache_wr"
+    "mem_access"
+    "mem_access_rd"
+    "mem_access_wr"
+    "ld_spec"
+    "st_spec"
+    "dp_spec"
+    "mem_access_rd_ctag"
+    "mem_access_wr_ctag"
+    "cap_mem_access_rd"
+    "cap_mem_access_wr"
+)
+
+# Initialize arrays for each metric
+for metric in "${metric_names[@]}"; do
+    declare -a "$metric=(0 0 0)"
+done
+
+# Process each metric
+for metric in "${metric_names[@]}"; do
+    result=$(cat ${LOG_DIR}/build-cheribsd-morello-*/results/pmcstat.*.gmon | grep "@ $metric \[")
+    readarray -t values < <(sed -n 's/.*\[\([0-9]\+\) samples\].*/\1/p' <<< "$result")
+    
+    # Store the values in the corresponding arrays
+    eval "$metric[0]=${values[0]:=0}"
+    eval "$metric[1]=${values[1]:=0}"
+    eval "$metric[2]=${values[2]:=0}"
+done
+
+echo "--------------$BENCHMARK---$SIZE----------------"
+echo "'$BENCHMARK': {"
+for metric in "${metric_names[@]}"; do
+    eval "echo \"'$metric': (\${$metric[0]}, \${$metric[1]}, \${$metric[2]}),\""
+done
+echo "}"
+echo "--------------$BENCHMARK---$SIZE----------------"
+
+# hybrid purecap-benchmark purecap
+echo "hybrid purecap-benchmark purecap" 
+
+result=$(cat ${LOG_DIR}/build-cheribsd-morello-*/results/pmcstat.timing.out | grep "real")
+echo "$result" \
+  | grep -oE '[0-9.]+ real' \
+  | sed 's/ real//' \
+  | paste -sd ','
+
+# echo $result
+
+out="IPC:"
+for i in {0..2}; do
+    eval "tmp=$(echo "scale=3; ${inst_retired[$i]} / ${cpu_cycles[$i]}" | bc -l)"
+    out="$out , $tmp"
+done
+echo $out
+
+# out="Frond End Stall Rate (%):"
+# for i in {0..2}; do
+#     eval "tmp=$(echo "scale=2; 100 * ${stall_frontend[$i]} / ${cpu_cycles[$i]}" | bc -l)"
+#     out="$out , $tmp"
+# done
+# echo $out
+
+# out="Back End Stall Rate (%):"
+# for i in {0..2}; do
+#     eval "tmp=$(echo "scale=2; 100 * ${stall_backend[$i]} / ${cpu_cycles[$i]}" | bc -l)"
+#     out="$out , $tmp"
+# done
+# echo $out
+
+out="Branch Misprediction Rate (%):"
+for i in {0..2}; do
+    eval "tmp=$(echo "scale=2; 100 * ${br_mis_pred_retired[$i]} / ${br_retired[$i]}" | bc -l)"
+    out="$out , $tmp"
+done
+echo $out
+
+out="L1I Cache Miss Rate (%):"
+for i in {0..2}; do
+    # echo ${l1i_cache_refill[$i]}
+    # echo ${l1i_cache[$i]}
+    eval "tmp=$(echo "scale=2; 100 * ${l1i_cache_refill[$i]} / ${l1i_cache[$i]}" | bc -l)"
+    out="$out , $tmp"
+done
+echo $out
+
+out="L1D Cache Miss Rate (%):"
+for i in {0..2}; do
+    eval "tmp=$(echo "scale=2; 100 * ${l1d_cache_refill[$i]} / ${l1d_cache[$i]}" | bc -l)"
+    out="$out , $tmp"
+done
+echo $out
+
+out="L2D Cache Miss Rate (%):"
+for i in {0..2}; do
+    eval "tmp=$(echo "scale=2; 100 * ${l2d_cache_refill[$i]} / ${l2d_cache[$i]}" | bc -l)"
+    out="$out , $tmp"
+done
+echo $out
+
+out="LLC Read MR (%):"
+for i in {0..2}; do
+    eval "tmp=$(echo "scale=2; 100 * ${ll_cache_miss_rd[$i]} / ${ll_cache_rd[$i]}" | bc -l)"
+    out="$out , $tmp"
+done
+echo $out
+
+out="ITLB Page Walk Rate (%):"
+for i in {0..2}; do
+    eval "tmp=$(echo "scale=2; 100 * ${itlb_walk[$i]} / ${l1i_tlb[$i]}" | bc -l)"
+    out="$out , $tmp"
+done
+echo $out
+
+out="DTLB Page Walk Rate (%):"
+for i in {0..2}; do
+    eval "tmp=$(echo "scale=2; 100 * ${dtlb_walk[$i]} / ${l1d_tlb[$i]}" | bc -l)"
+    out="$out , $tmp"
+done
+echo $out
+
+out="Capability Load Density (%):"
+for i in {0..2}; do
+    eval "tmp=$(echo "scale=2; 100 * ${cap_mem_access_rd[$i]} / ${ld_spec[$i]}" | bc -l)"
+    out="$out , $tmp"
+done
+echo $out
+
+out="Capability Store Density (%):"
+for i in {0..2}; do
+    eval "tmp=$(echo "scale=2; 100 * ${cap_mem_access_wr[$i]} / ${st_spec[$i]}" | bc -l)"
+    out="$out , $tmp"
+done
+echo $out
+
+out="Capability Traffic Share (%):"
+for i in {0..2}; do
+    eval "tmp=$(echo "scale=2; 100 * (${cap_mem_access_rd[$i]}+${cap_mem_access_wr[$i]})/(${mem_access_rd[$i]}+${mem_access_wr[$i]})" | bc -l)"
+    out="$out , $tmp"
+done
+echo $out
+
+out="Capability Tag Overhead (%):"
+for i in {0..2}; do
+    eval "tmp=$(echo "scale=2; 100 * (${mem_access_rd_ctag[$i]}+${mem_access_wr_ctag[$i]})/(${mem_access_rd[$i]}+${mem_access_wr[$i]})" | bc -l)"
+    out="$out , $tmp"
+done
+echo $out

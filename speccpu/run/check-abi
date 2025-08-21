@@ -1,0 +1,27 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+declare -A FILTERS=(
+    ["cheribsd-morello-hybrid-cheribuild_llvm"]="'A64, version 1 (FreeBSD)'"
+    ["cheribsd-morello-purecap-benchmark-cheribuild_llvm"]="'pure-capability benchmark ABI'"
+    ["cheribsd-morello-purecap-cheribuild_llvm"]="'C64, CheriABI, version 1 (SYSV)'"
+);
+
+rm -f /tmp/spec_run_check-abi
+
+for bench in "${RUNNABLE_BENCHMARKS[@]}"; do
+    for label in "${LABELS[@]}"; do
+        for size in "${SIZES[@]}"; do
+            run_folder="run_base_${size}_${label}.0000"
+            binary_name="*_base.${label}"
+            
+            command="file ${_CHERI_MORELLO_RUN_DIR}/${bench}/${run_folder}/${binary_name} | grep -q ${FILTERS[$label]}"
+            
+            echo ssh ${_CHERI_MORELLO_CONNECT} "\"${command} && if [ \$? -ne 0 ]; then echo \'${bench}-${size}-${label} may suffer wrong abis.\' ; fi \"" >> /tmp/spec_run_check-abi
+        done
+    done
+done
+
+/bin/bash /tmp/spec_run_check-abi && \
+printf "\nAll binaries have checked ABIs (no output means success)\n\n" 
+# rm -f /tmp/spec_run_check-abi

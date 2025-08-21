@@ -1,0 +1,76 @@
+#!/bin/bash
+PROJECT_ROOT="/home/iiswc/workspace/workload-characterization-on-morello"
+LOG_DIR="${PROJECT_ROOT}/results/quickjs"
+
+# Define the metrics we want to track
+declare -a metric_names=(
+    "inst_retired"
+    "cpu_cycles"
+    "stall_backend"
+    "stall_frontend"
+    "inst_spec"
+    "ase_spec"
+    "br_retired"
+    "br_mis_pred_retired"
+    "br_indirect_spec"
+    "br_return_spec"
+    "br_immed_spec"
+    "itlb_walk"
+    "l1i_tlb_refill"
+    "l1i_tlb"
+    "l1i_cache"
+    "l1i_cache_refill"
+    "vfp_spec"
+    "dtlb_walk"
+    "l1d_tlb"
+    "l1d_tlb_refill"
+    "l2d_tlb"
+    "l2d_tlb_refill"
+    "crypto_spec"
+    "l1d_cache"
+    "l1d_cache_rd"
+    "l1d_cache_refill"
+    "l1d_cache_wr"
+    "ll_cache_miss_rd"
+    "ll_cache_rd"
+    "l2d_cache"
+    "l2d_cache_rd"
+    "l2d_cache_refill"
+    "l2d_cache_allocate"
+    "l2d_cache_wr"
+    "mem_access"
+    "mem_access_rd"
+    "mem_access_wr"
+    "ld_spec"
+    "st_spec"
+    "dp_spec"
+    "mem_access_rd_ctag"
+    "mem_access_wr_ctag"
+    "cap_mem_access_rd"
+    "cap_mem_access_wr"
+)
+
+# Initialize arrays for each metric
+for metric in "${metric_names[@]}"; do
+    declare -a "$metric=(0 0 0)"
+done
+
+# Process each metric
+for metric in "${metric_names[@]}"; do
+    result=$(cat ${LOG_DIR}/build-cheribsd-morello-*/results/pmcstat.*.gmon | grep "@ $metric \[")
+    readarray -t values < <(sed -n 's/.*\[\([0-9]\+\) samples\].*/\1/p' <<< "$result")
+    
+    # Store the values in the corresponding arrays
+    eval "$metric[0]=${values[0]:=0}"
+    eval "$metric[1]=${values[1]:=0}"
+    eval "$metric[2]=${values[2]:=0}"
+done
+
+# hybrid purecap-benchmark purecap
+# echo "hybrid purecap-benchmark purecap" 
+# echo "--------------$BENCHMARK---$SIZE----------------"
+echo "'quickjs': {"
+for metric in "${metric_names[@]}"; do
+    eval "echo \"'$metric': (\${$metric[0]}, \${$metric[1]}, \${$metric[2]}),\""
+done
+echo "},"

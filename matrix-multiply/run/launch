@@ -1,0 +1,15 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+for run_folder in "${RUN_FOLDERS[@]}"; do
+    echo "Launching ${run_folder}"
+    ssh ${_CHERI_MORELLO_CONNECT_ROOT} "rm -rf ${_CHERI_MORELLO_RUN_DIR}/${run_folder}/results"
+    ssh ${_CHERI_MORELLO_CONNECT_ROOT} "mkdir -p ${_CHERI_MORELLO_RUN_DIR}/${run_folder}/results"
+    
+    ssh ${_CHERI_MORELLO_CONNECT_ROOT} \
+        "cd ${_CHERI_MORELLO_RUN_DIR}/${run_folder} && ./_launch_pmcstat"
+    
+    mkdir -p ${_PROJECT_ROOT}/${_RESULTS_FOLDER}/${run_folder}/
+    /bin/bash -c "scp -r ${_CHERI_MORELLO_CONNECT_ROOT}:${_CHERI_MORELLO_RUN_DIR}/${run_folder}/results \
+        ${_PROJECT_ROOT}/${_RESULTS_FOLDER}/${run_folder}/"
+done

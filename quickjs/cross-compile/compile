@@ -1,0 +1,51 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+# set -e          # exit on any command failure
+# set -o pipefail # catch errors in pipelines
+set -x          # (optional) echo commands as they run
+
+# build
+safe_cd "${_QUICKJS_PATH}"
+cp ${_CONFIGS_FOLDER}/../quickjs/src/* ${_QUICKJS_PATH}
+
+rm -rf ${_QUICKJS_PATH}/build-cheribsd-morello-purecap
+rm -rf ${_QUICKJS_PATH}/build-cheribsd-morello-hybrid
+rm -rf ${_QUICKJS_PATH}/build-cheribsd-morello-purecap-benchmark
+
+export CC=${LLVM_DIR}/bin/clang
+export CXX=${LLVM_DIR}/bin/clang++
+export LD=${LLVM_DIR}/bin/lld
+export CCLD=${LLVM_DIR}/bin/lld
+export LINK=${LLVM_DIR}/bin/lld
+export AR=${LLVM_DIR}/bin/llvm-ar
+export CPATH=${_QUICKJS_PATH}:${CPATH}
+
+declare -A FILTERS=(
+    ["purecap"]="${_CHERI_PURECAP_CFG}"
+    ["hybrid"]="${_CHERI_HYBRID_CFG}"
+    ["purecap-benchmark"]="${_CHERI_BENCHMARK_CFG}"
+);
+
+for abi in purecap hybrid purecap-benchmark; do
+
+    RPATH_FLAGS="-Wl,-rpath,/home/iiswc/quickjs/build-cheribsd-morello-${abi}/lib/"
+    CFLAGS="-std=c99 --config ${FILTERS[$abi]} ${RPATH_FLAGS}"
+
+    _PREFIX="PREFIX=${_QUICKJS_PATH}/build-cheribsd-morello-${abi} CROSS_PREFIX=/home/iiswc/quickjs/build-cheribsd-morello-${abi}/"
+
+    make clean ${_PREFIX} && \
+    make ${_PREFIX} \
+    CC="${CC} ${CFLAGS}" AR="${AR}" -j 8 
+
+    scp ${_QUICKJS_PATH}/repl.js ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}
+    scp ${_QUICKJS_PATH}/qjsc ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}
+    ssh ${_CHERI_MORELLO_CONNECT} "cd ${_CHERI_MORELLO_RUN_DIR} && ./qjsc -s -c -o repl.c -m ./repl.js"
+    scp ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}/repl.c ${_QUICKJS_PATH}/repl.c
+    ssh ${_CHERI_MORELLO_CONNECT} "cd ${_CHERI_MORELLO_RUN_DIR} && rm -rf repl.c repl.js qjsc"
+
+    make ${_PREFIX} \
+    CC="${CC} ${CFLAGS}" AR="${AR}" -j 8 && \
+    make install ${_PREFIX}
+
+done

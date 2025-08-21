@@ -1,0 +1,130 @@
+#!/bin/bash
+
+# Path & Variables
+_SPECCPU_PATH="/home/iiswc/workspace/SPEC/cpu2017-1.1.0/benchspec/CPU"
+_CONFIGS_FOLDER="${_PROJECT_ROOT}/configs/speccpu"
+_CHERI_PURECAP_CFG="${_CONFIGS_FOLDER}/morello-purecap-clang-linux-x86.cfg"
+_CHERI_HYBRID_CFG="${_CONFIGS_FOLDER}/morello-hybrid-clang-linux-x86.cfg"
+_CHERI_BENCHMARK_CFG="${_CONFIGS_FOLDER}/morello-purecap-benchmark-clang-linux-x86.cfg"
+_FREEBSD_CFG="${_CONFIGS_FOLDER}/clang-linux-x86.cfg"
+
+# morello
+_CHERI_MORELLO_CONNECT_IP=${2:-192.168.1.101}
+_CHERI_MORELLO_CONNECT="iiswc@${_CHERI_MORELLO_CONNECT_IP}"
+_CHERI_MORELLO_CONNECT_ROOT="root@${_CHERI_MORELLO_CONNECT_IP}"
+_CHERI_MORELLO_RUN_DIR="/home/iiswc/spec_run"
+
+# project and expertiment results
+_PROJECT_ROOT="/home/iiswc/workspace/workload-characterization-on-morello"
+_RESULTS_FOLDER="${3:-results/speccpu}"
+# _RUNNABLE_SIZE="${4:-all}"
+_RUNNABLE_SIZE="${4:-test}"
+
+# benchmarks
+BENCHMARKS=(
+    "502.gcc_r"
+    "505.mcf_r"
+    "520.omnetpp_r"
+    "523.xalancbmk_r"
+    "525.x264_r"
+    "531.deepsjeng_r"
+    "541.leela_r"
+    "557.xz_r"
+    "508.namd_r"
+    "510.parest_r"
+    "511.povray_r"
+    "519.lbm_r"
+    "538.imagick_r"
+    "544.nab_r"
+    "602.gcc_s"
+    "605.mcf_s"
+    "620.omnetpp_s"
+    "623.xalancbmk_s"
+    "625.x264_s"
+    "631.deepsjeng_s"
+    "641.leela_s"
+    "657.xz_s"
+    "619.lbm_s"
+    "638.imagick_s"
+    "644.nab_s"
+)
+
+LABELS=(
+    "cheribsd-morello-hybrid-cheribuild_llvm"
+    "cheribsd-morello-purecap-benchmark-cheribuild_llvm"
+    "cheribsd-morello-purecap-cheribuild_llvm"
+)
+
+SIZES=(   
+    "ref"
+    "train"
+    "test"
+)
+
+RUNNABLE_BENCHMARKS=(
+    "520.omnetpp_r"
+    "523.xalancbmk_r"  
+    "531.deepsjeng_r"
+    "541.leela_r"
+    "557.xz_r"
+    "510.parest_r"
+    "519.lbm_r"
+    "544.nab_r"
+    "620.omnetpp_s"
+    "623.xalancbmk_s"
+    "631.deepsjeng_s"
+    "641.leela_s"
+    "657.xz_s"
+    "644.nab_s"
+)
+# "525.x264_r" # cannot run under pmcstat for purecap and purecap-benchmark
+# "625.x264_s" # cannot run under pmcstat for purecap and purecap-benchmark
+
+if [ "${_RUNNABLE_SIZE}" == "test" ]; then
+    RUNNABLE_LABELS=(
+        "run_base_test_cheribsd-morello-hybrid-cheribuild_llvm.0000"     
+        "run_base_test_cheribsd-morello-purecap-benchmark-cheribuild_llvm.0000"
+        "run_base_test_cheribsd-morello-purecap-cheribuild_llvm.0000"
+    )
+elif [ "${_RUNNABLE_SIZE}" == "train" ]; then
+    RUNNABLE_LABELS=(
+        "run_base_train_cheribsd-morello-hybrid-cheribuild_llvm.0000"
+        "run_base_train_cheribsd-morello-purecap-benchmark-cheribuild_llvm.0000"
+        "run_base_train_cheribsd-morello-purecap-cheribuild_llvm.0000"
+    )
+elif [ "${_RUNNABLE_SIZE}" == "ref" ]; then 
+    RUNNABLE_LABELS=(
+        "run_base_ref_cheribsd-morello-hybrid-cheribuild_llvm.0000"   
+        "run_base_ref_cheribsd-morello-purecap-benchmark-cheribuild_llvm.0000" 
+        "run_base_ref_cheribsd-morello-purecap-cheribuild_llvm.0000"
+    )
+else
+    RUNNABLE_LABELS=(
+        "run_base_test_cheribsd-morello-hybrid-cheribuild_llvm.0000"     
+        "run_base_test_cheribsd-morello-purecap-benchmark-cheribuild_llvm.0000"
+        "run_base_test_cheribsd-morello-purecap-cheribuild_llvm.0000"
+        "run_base_train_cheribsd-morello-hybrid-cheribuild_llvm.0000"
+        "run_base_train_cheribsd-morello-purecap-benchmark-cheribuild_llvm.0000"
+        "run_base_train_cheribsd-morello-purecap-cheribuild_llvm.0000"
+        "run_base_ref_cheribsd-morello-hybrid-cheribuild_llvm.0000"   
+        "run_base_ref_cheribsd-morello-purecap-benchmark-cheribuild_llvm.0000" 
+        "run_base_ref_cheribsd-morello-purecap-cheribuild_llvm.0000"
+    )
+fi
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <benchmark>"
+    exit 1
+fi
+
+if [[ $1 == 'all' ]]; then
+    _BENCHMARKS=("${RUNNABLE_BENCHMARKS[@]}")
+else
+    if [[ ! " ${RUNNABLE_BENCHMARKS[@]} " =~ " $1 " ]]; then
+        echo "Benchmark $1 not found"
+        exit 1
+    fi
+    _BENCHMARKS=("$1")
+fi
+echo "For benchmarks: ${_BENCHMARKS[@]}"
+

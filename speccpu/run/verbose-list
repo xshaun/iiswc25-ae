@@ -1,0 +1,98 @@
+#!/bin/bash
+PROJECT_ROOT="/home/iiswc/workspace/workload-characterization-on-morello"
+LOG_DIR="${PROJECT_ROOT}/results/speccpu-train-round-1"
+# BENCHMARK="510.parest_r"
+# BENCHMARK="519.lbm_r"
+# BENCHMARK="520.omnetpp_r"
+# BENCHMARK="523.xalancbmk_r"
+# BENCHMARK="531.deepsjeng_r"
+# BENCHMARK="541.leela_r"
+# BENCHMARK="544.nab_r"
+# BENCHMARK="557.xz_r"
+# BENCHMARK="620.omnetpp_s"
+# BENCHMARK="623.xalancbmk_s"
+# BENCHMARK="631.deepsjeng_s"
+# BENCHMARK="641.leela_s"
+# BENCHMARK="644.nab_s"
+# BENCHMARK="657.xz_s"
+
+echo "{"
+
+for BENCHMARK in "510.parest_r" "519.lbm_r" "520.omnetpp_r" "523.xalancbmk_r" "531.deepsjeng_r" "541.leela_r" "544.nab_r" "557.xz_r" "620.omnetpp_s" "623.xalancbmk_s" "631.deepsjeng_s" "641.leela_s" "644.nab_s" "657.xz_s"; do
+
+    SIZE="train"
+
+    # Define the metrics we want to track
+    declare -a metric_names=(
+        "inst_retired"
+        "cpu_cycles"
+        "stall_backend"
+        "stall_frontend"
+        "inst_spec"
+        "ase_spec"
+        "br_retired"
+        "br_mis_pred_retired"
+        "br_indirect_spec"
+        "br_return_spec"
+        "br_immed_spec"
+        "itlb_walk"
+        "l1i_tlb_refill"
+        "l1i_tlb"
+        "l1i_cache"
+        "l1i_cache_refill"
+        "vfp_spec"
+        "dtlb_walk"
+        "l1d_tlb"
+        "l1d_tlb_refill"
+        "l2d_tlb"
+        "l2d_tlb_refill"
+        "crypto_spec"
+        "l1d_cache"
+        "l1d_cache_rd"
+        "l1d_cache_refill"
+        "l1d_cache_wr"
+        "ll_cache_miss_rd"
+        "ll_cache_rd"
+        "l2d_cache"
+        "l2d_cache_rd"
+        "l2d_cache_refill"
+        "l2d_cache_allocate"
+        "l2d_cache_wr"
+        "mem_access"
+        "mem_access_rd"
+        "mem_access_wr"
+        "ld_spec"
+        "st_spec"
+        "dp_spec"
+        "mem_access_rd_ctag"
+        "mem_access_wr_ctag"
+        "cap_mem_access_rd"
+        "cap_mem_access_wr"
+    )
+
+    # Initialize arrays for each metric
+    for metric in "${metric_names[@]}"; do
+        declare -a "$metric=(0 0 0)"
+    done
+
+    # Process each metric
+    for metric in "${metric_names[@]}"; do
+        result=$(cat ${LOG_DIR}/${BENCHMARK}/run_base_${SIZE}_cheribsd-morello-*/pmcstat.*.gmon | grep "@ $metric \[")
+        readarray -t values < <(sed -n 's/.*\[\([0-9]\+\) samples\].*/\1/p' <<< "$result")
+        
+        # Store the values in the corresponding arrays
+        eval "$metric[0]=${values[0]:=0}"
+        eval "$metric[1]=${values[1]:=0}"
+        eval "$metric[2]=${values[2]:=0}"
+    done
+
+    # hybrid purecap-benchmark purecap
+    # echo "hybrid purecap-benchmark purecap" 
+    # echo "--------------$BENCHMARK---$SIZE----------------"
+    echo "'$BENCHMARK': {"
+    for metric in "${metric_names[@]}"; do
+        eval "echo \"'$metric': (\${$metric[0]}, \${$metric[1]}, \${$metric[2]}),\""
+    done
+    echo "},"
+done
+echo "}"

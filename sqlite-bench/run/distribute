@@ -1,0 +1,20 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+ssh ${_CHERI_MORELLO_CONNECT} "mkdir -p ${_CHERI_MORELLO_RUN_DIR}"
+ssh ${_CHERI_MORELLO_CONNECT} "mkdir -p ${_CHERI_MORELLO_RUN_DIR}/build-cheribsd-morello-purecap"
+ssh ${_CHERI_MORELLO_CONNECT} "mkdir -p ${_CHERI_MORELLO_RUN_DIR}/build-cheribsd-morello-purecap-benchmark"
+ssh ${_CHERI_MORELLO_CONNECT} "mkdir -p ${_CHERI_MORELLO_RUN_DIR}/build-cheribsd-morello-hybrid"
+
+scp ${_PROJECT_ROOT}/sqlite-bench/binaries/sqlite3-purecap ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}/build-cheribsd-morello-purecap/sqlite3
+scp ${_PROJECT_ROOT}/sqlite-bench/binaries/sqlite3-purecap-benchmark ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}/build-cheribsd-morello-purecap-benchmark/sqlite3
+scp ${_PROJECT_ROOT}/sqlite-bench/binaries/sqlite3-hybrid ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}/build-cheribsd-morello-hybrid/sqlite3
+scp ${_PROJECT_ROOT}/sqlite-bench/binaries/_launch_* ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}/build-cheribsd-morello-purecap/
+scp ${_PROJECT_ROOT}/sqlite-bench/binaries/_launch_* ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}/build-cheribsd-morello-purecap-benchmark/
+scp ${_PROJECT_ROOT}/sqlite-bench/binaries/_launch_* ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}/build-cheribsd-morello-hybrid/
+
+# generate speedtest suite
+if [ ! -f ${_PROJECT_ROOT}/sqlite-bench/speedtest/suite.sql ]; then
+    cd ${_PROJECT_ROOT}/sqlite-bench/speedtest && chmod +x ./run && ./run
+fi
+scp ${_PROJECT_ROOT}/sqlite-bench/speedtest/suite.sql ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}/suite.sql

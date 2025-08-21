@@ -1,0 +1,550 @@
+
+CheriBSD on Morello 
+
+root@cheribsd-morello-purecap:~/llama.cpp/build-make-morello-cheribsd-hybrid # file ./llama-bench
+./llama-bench: ELF 64-bit LSB executable, ARM aarch64, A64, version 1 (FreeBSD), dynamically linked, interpreter /libexec/ld-elf.so.1, for FreeBSD 14.0 (1400094), FreeBSD-style, with debug_info, not stripped
+root@cheribsd-morello-purecap:~/llama.cpp/build-make-morello-cheribsd-hybrid # cd ../build-make-morello-cheribsd-purecap/
+
+root@cheribsd-morello-purecap:~/llama.cpp/build-make-morello-cheribsd-purecap # file ./llama-bench
+./llama-bench: ELF 64-bit LSB pie executable, ARM aarch64, C64, CheriABI, version 1 (SYSV), dynamically linked, interpreter /libexec/ld-elf.so.1, for FreeBSD 14.0 (1400094), FreeBSD-style, with debug_info, not stripped
+root@cheribsd-morello-purecap:~/llama.cpp/build-make-morello-cheribsd-purecap # 
+
+root@cheribsd-morello:~/llama.cpp/build-make-morello-cheribsd-purecap # ./benchmark-matmult 
+main: build = 2470 (6f14ff31)
+main: built with clang version 14.0.0 (https://git.morello-project.org/morello/llvm-project.git 671d6dbe2b74525702368edfa086e68f5afadc24) for aarch64-unknown-linux-gnu
+Starting Test
+Allocating Memory of size 800194560 bytes, 763 MB
+Creating new tensors
+
+------ Test 1 - Matrix Mult via F32 code
+n_threads=1
+            m11: type = 0 (  f32) ne = 11008 x  4096 x     1, nb = (    4, 44032, 180355072) - Sum of tensor m11 is 45088768.00
+             m2: type = 0 (  f32) ne = 11008 x   128 x     1, nb = (    4, 44032, 5636096) - Sum of tensor m2 is 2818048.00
+   gf->nodes[0]: type = 0 (  f32) ne =  4096 x   128 x     1, nb = (    4, 16384, 2097152) - Sum of tensor gf->nodes[0] is 11542724608.00
+
+------ Test 2 - Matrix Mult via q4_1 code
+n_threads=1
+Matrix Multiplication of (11008,4096,1) x (11008,128,1) - about  11.54 gFLOPS
+
+Iteration;NThreads; SizeX; SizeY; SizeZ; Required_FLOPS; Elapsed_u_Seconds; gigaFLOPS
+=====================================================================================
+        0;       1; 11008;  4096;   128;    11542724608;            583050;     19.80
+        1;       1; 11008;  4096;   128;    11542724608;            580919;     19.87
+        2;       1; 11008;  4096;   128;    11542724608;            580890;     19.87
+        3;       1; 11008;  4096;   128;    11542724608;            580896;     19.87
+        4;       1; 11008;  4096;   128;    11542724608;            580902;     19.87
+        5;       1; 11008;  4096;   128;    11542724608;            580849;     19.87
+        6;       1; 11008;  4096;   128;    11542724608;            580786;     19.87
+        7;       1; 11008;  4096;   128;    11542724608;            580838;     19.87
+        8;       1; 11008;  4096;   128;    11542724608;            580840;     19.87
+        9;       1; 11008;  4096;   128;    11542724608;            580810;     19.87
+
+Average                                                                         19.86
+=====================================================================================
+
+
+root@cheribsd-morello:~/llama.cpp/build-make-morello-cheribsd-hybrid # ./benchmark-matmult
+main: build = 2470 (6f14ff31)
+main: built with clang version 14.0.0 (https://git.morello-project.org/morello/llvm-project.git 671d6dbe2b74525702368edfa086e68f5afadc24) for aarch64-unknown-linux-gnu
+Starting Test
+Allocating Memory of size 800194560 bytes, 763 MB
+Creating new tensors
+
+------ Test 1 - Matrix Mult via F32 code
+n_threads=1
+            m11: type = 0 (  f32) ne = 11008 x  4096 x     1, nb = (    4, 44032, 180355072) - Sum of tensor m11 is 45088768.00
+             m2: type = 0 (  f32) ne = 11008 x   128 x     1, nb = (    4, 44032, 5636096) - Sum of tensor m2 is 2818048.00
+   gf->nodes[0]: type = 0 (  f32) ne =  4096 x   128 x     1, nb = (    4, 16384, 2097152) - Sum of tensor gf->nodes[0] is 11542724608.00
+
+------ Test 2 - Matrix Mult via q4_1 code
+n_threads=1
+Matrix Multiplication of (11008,4096,1) x (11008,128,1) - about  11.54 gFLOPS
+
+Iteration;NThreads; SizeX; SizeY; SizeZ; Required_FLOPS; Elapsed_u_Seconds; gigaFLOPS
+=====================================================================================
+        0;       1; 11008;  4096;   128;    11542724608;            598838;     19.28
+        1;       1; 11008;  4096;   128;    11542724608;            596782;     19.34
+        2;       1; 11008;  4096;   128;    11542724608;            596759;     19.34
+        3;       1; 11008;  4096;   128;    11542724608;            596724;     19.34
+        4;       1; 11008;  4096;   128;    11542724608;            596695;     19.34
+        5;       1; 11008;  4096;   128;    11542724608;            596724;     19.34
+        6;       1; 11008;  4096;   128;    11542724608;            596752;     19.34
+        7;       1; 11008;  4096;   128;    11542724608;            596815;     19.34
+        8;       1; 11008;  4096;   128;    11542724608;            596686;     19.34
+        9;       1; 11008;  4096;   128;    11542724608;            596736;     19.34
+
+Average                                                                         19.34
+=====================================================================================
+
+
+
+
+
+
+Qemu - morello-purecap:
+
+root@cheribsd-morello-purecap:~/build-make-morello-cheribsd-purecap # ./benchmark-matmult 
+main: build = 2470 (6f14ff31)
+main: built with clang version 14.0.0 (https://git.morello-project.org/morello/llvm-project.git 671d6dbe2b74525702368edfa086e68f5afadc24) for aarch64-unknown-linux-gnu
+Starting Test
+Allocating Memory of size 800194560 bytes, 763 MB
+Creating new tensors
+
+------ Test 1 - Matrix Mult via F32 code
+n_threads=1
+            m11: type = 0 (  f32) ne = 11008 x  4096 x     1, nb = (    4, 44032, 180355072) - Sum of tensor m11 is 45088768.00
+             m2: type = 0 (  f32) ne = 11008 x   128 x     1, nb = (    4, 44032, 5636096) - Sum of tensor m2 is 2818048.00
+   gf->nodes[0]: type = 0 (  f32) ne =  4096 x   128 x     1, nb = (    4, 16384, 2097152) - Sum of tensor gf->nodes[0] is 11542724608.00
+
+------ Test 2 - Matrix Mult via q4_1 code
+n_threads=1
+Matrix Multiplication of (11008,4096,1) x (11008,128,1) - about  11.54 gFLOPS
+
+Iteration;NThreads; SizeX; SizeY; SizeZ; Required_FLOPS; Elapsed_u_Seconds; gigaFLOPS
+=====================================================================================
+        0;       1; 11008;  4096;   128;    11542724608;          37978223;      0.30
+        1;       1; 11008;  4096;   128;    11542724608;          37851204;      0.30
+        2;       1; 11008;  4096;   128;    11542724608;          37855306;      0.30
+        3;       1; 11008;  4096;   128;    11542724608;          37853039;      0.30
+        4;       1; 11008;  4096;   128;    11542724608;          37856321;      0.30
+        5;       1; 11008;  4096;   128;    11542724608;          37859555;      0.30
+        6;       1; 11008;  4096;   128;    11542724608;          37830902;      0.31
+        7;       1; 11008;  4096;   128;    11542724608;          37834580;      0.31
+        8;       1; 11008;  4096;   128;    11542724608;          37833692;      0.31
+        9;       1; 11008;  4096;   128;    11542724608;          37838008;      0.31
+
+Average                                                                          0.30
+=====================================================================================
+
+
+root@cheribsd-morello-purecap:~/build-make-morello-cheribsd-hybrid # ./benchmark-matmult 
+main: build = 2470 (6f14ff31)
+main: built with clang version 14.0.0 (https://git.morello-project.org/morello/llvm-project.git 671d6dbe2b74525702368edfa086e68f5afadc24) for aarch64-unknown-linux-gnu
+Starting Test
+Allocating Memory of size 800194560 bytes, 763 MB
+Creating new tensors
+
+------ Test 1 - Matrix Mult via F32 code
+n_threads=1
+            m11: type = 0 (  f32) ne = 11008 x  4096 x     1, nb = (    4, 44032, 180355072) - Sum of tensor m11 is 45088768.00
+             m2: type = 0 (  f32) ne = 11008 x   128 x     1, nb = (    4, 44032, 5636096) - Sum of tensor m2 is 2818048.00
+   gf->nodes[0]: type = 0 (  f32) ne =  4096 x   128 x     1, nb = (    4, 16384, 2097152) - Sum of tensor gf->nodes[0] is 11542724608.00
+
+------ Test 2 - Matrix Mult via q4_1 code
+n_threads=1
+Matrix Multiplication of (11008,4096,1) x (11008,128,1) - about  11.54 gFLOPS
+
+Iteration;NThreads; SizeX; SizeY; SizeZ; Required_FLOPS; Elapsed_u_Seconds; gigaFLOPS
+=====================================================================================
+        0;       1; 11008;  4096;   128;    11542724608;          33919543;      0.34
+        1;       1; 11008;  4096;   128;    11542724608;          33805900;      0.34
+        2;       1; 11008;  4096;   128;    11542724608;          33786621;      0.34
+        3;       1; 11008;  4096;   128;    11542724608;          33784065;      0.34
+        4;       1; 11008;  4096;   128;    11542724608;          33803602;      0.34
+        5;       1; 11008;  4096;   128;    11542724608;          33797993;      0.34
+        6;       1; 11008;  4096;   128;    11542724608;          33792094;      0.34
+        7;       1; 11008;  4096;   128;    11542724608;          33778247;      0.34
+        8;       1; 11008;  4096;   128;    11542724608;          33782962;      0.34
+        9;       1; 11008;  4096;   128;    11542724608;          33774015;      0.34
+
+Average                                                                          0.34
+=====================================================================================
+
+
+
+
+
+Qemu - morello-hybrid:
+
+root@cheribsd-morello-hybrid:~/build-make-morello-cheribsd-purecap #  ./benchmark-matmult 
+main: build = 2470 (6f14ff31)
+main: built with clang version 14.0.0 (https://git.morello-project.org/morello/llvm-project.git 671d6dbe2b74525702368edfa086e68f5afadc24) for aarch64-unknown-linux-gnu
+Starting Test
+Allocating Memory of size 800194560 bytes, 763 MB
+Creating new tensors
+
+------ Test 1 - Matrix Mult via F32 code
+n_threads=1
+            m11: type = 0 (  f32) ne = 11008 x  4096 x     1, nb = (    4, 44032, 180355072) - Sum of tensor m11 is 45088768.00
+             m2: type = 0 (  f32) ne = 11008 x   128 x     1, nb = (    4, 44032, 5636096) - Sum of tensor m2 is 2818048.00
+   gf->nodes[0]: type = 0 (  f32) ne =  4096 x   128 x     1, nb = (    4, 16384, 2097152) - Sum of tensor gf->nodes[0] is 11542724608.00
+
+------ Test 2 - Matrix Mult via q4_1 code
+n_threads=1
+Matrix Multiplication of (11008,4096,1) x (11008,128,1) - about  11.54 gFLOPS
+
+Iteration;NThreads; SizeX; SizeY; SizeZ; Required_FLOPS; Elapsed_u_Seconds; gigaFLOPS
+=====================================================================================
+        0;       1; 11008;  4096;   128;    11542724608;          37970213;      0.30
+        1;       1; 11008;  4096;   128;    11542724608;          37847275;      0.30
+        2;       1; 11008;  4096;   128;    11542724608;          37847260;      0.30
+        3;       1; 11008;  4096;   128;    11542724608;          37845460;      0.30
+        4;       1; 11008;  4096;   128;    11542724608;          37845026;      0.30
+        5;       1; 11008;  4096;   128;    11542724608;          37840470;      0.31
+        6;       1; 11008;  4096;   128;    11542724608;          37831443;      0.31
+        7;       1; 11008;  4096;   128;    11542724608;          37832838;      0.31
+        8;       1; 11008;  4096;   128;    11542724608;          37829142;      0.31
+        9;       1; 11008;  4096;   128;    11542724608;          37825553;      0.31
+
+Average                                                                          0.30
+=====================================================================================
+
+
+
+root@cheribsd-morello-hybrid:~/build-make-morello-cheribsd-hybrid #  ./benchmark-matmult
+main: build = 2470 (6f14ff31)
+main: built with clang version 14.0.0 (https://git.morello-project.org/morello/llvm-project.git 671d6dbe2b74525702368edfa086e68f5afadc24) for aarch64-unknown-linux-gnu                                                                                                                                                   
+Starting Test
+Allocating Memory of size 800194560 bytes, 763 MB
+Creating new tensors
+
+------ Test 1 - Matrix Mult via F32 code
+n_threads=1
+            m11: type = 0 (  f32) ne = 11008 x  4096 x     1, nb = (    4, 44032, 180355072) - Sum of tensor m11 is 45088768.00
+             m2: type = 0 (  f32) ne = 11008 x   128 x     1, nb = (    4, 44032, 5636096) - Sum of tensor m2 is 2818048.00
+   gf->nodes[0]: type = 0 (  f32) ne =  4096 x   128 x     1, nb = (    4, 16384, 2097152) - Sum of tensor gf->nodes[0] is 11542724608.00
+
+------ Test 2 - Matrix Mult via q4_1 code
+n_threads=1
+Matrix Multiplication of (11008,4096,1) x (11008,128,1) - about  11.54 gFLOPS
+
+Iteration;NThreads; SizeX; SizeY; SizeZ; Required_FLOPS; Elapsed_u_Seconds; gigaFLOPS
+=====================================================================================
+        0;       1; 11008;  4096;   128;    11542724608;          33832537;      0.34
+        1;       1; 11008;  4096;   128;    11542724608;          33727833;      0.34
+        2;       1; 11008;  4096;   128;    11542724608;          33717112;      0.34
+        3;       1; 11008;  4096;   128;    11542724608;          33720761;      0.34
+        4;       1; 11008;  4096;   128;    11542724608;          33721394;      0.34
+        5;       1; 11008;  4096;   128;    11542724608;          33721043;      0.34
+        6;       1; 11008;  4096;   128;    11542724608;          33717422;      0.34
+        7;       1; 11008;  4096;   128;    11542724608;          33717944;      0.34
+        8;       1; 11008;  4096;   128;    11542724608;          33703541;      0.34
+        9;       1; 11008;  4096;   128;    11542724608;          33702903;      0.34
+
+Average                                                                          0.34
+=====================================================================================
+
+
+
+
+
+
+
+
+CheriBSD on Morello 
+
+
+root@cheribsd-morello:~/llama.cpp/build-make-morello-cheribsd-purecap # ./benchmark-matmult
+main: build = 2472 (0de9804f)
+main: built with clang version 14.0.0 (https://git.morello-project.org/morello/llvm-project.git 43105276d6d26e5a687a96ed84e20ad3d8b2fb89) for aarch64-unknown-linux-gnu
+Starting Test
+Allocating Memory of size 782237696 bytes, 746 MB
+Creating new tensors
+
+------ Test 1 - Matrix Mult via F32 code
+n_threads=1
+            m11: type = 0 (  f32) ne = 10240 x  4096 x     1, nb = (    4, 40960, 167772160) - Sum of tensor m11 is 41943040.00
+             m2: type = 0 (  f32) ne = 10240 x  1024 x     1, nb = (    4, 40960, 41943040) - Sum of tensor m2 is 20971520.00
+   gf->nodes[0]: type = 0 (  f32) ne =  4096 x  1024 x     1, nb = (    4, 16384, 16777216) - Sum of tensor gf->nodes[0] is 85899345920.00
+
+------ Test 2 - Matrix Mult via q4_1 code
+n_threads=1
+Matrix Multiplication of (10240,4096,1) x (10240,1024,1) - about  85.90 gFLOPS
+
+Iteration;NThreads; SizeX; SizeY; SizeZ; Required_FLOPS; Elapsed_u_Seconds; gigaFLOPS
+=====================================================================================
+        0;       1; 10240;  4096;  1024;    85899345920;           4339742;     19.79
+        1;       1; 10240;  4096;  1024;    85899345920;           4322717;     19.87
+        2;       1; 10240;  4096;  1024;    85899345920;           4322397;     19.87
+        3;       1; 10240;  4096;  1024;    85899345920;           4322554;     19.87
+        4;       1; 10240;  4096;  1024;    85899345920;           4322241;     19.87
+        5;       1; 10240;  4096;  1024;    85899345920;           4322068;     19.87
+        6;       1; 10240;  4096;  1024;    85899345920;           4322339;     19.87
+        7;       1; 10240;  4096;  1024;    85899345920;           4322435;     19.87
+        8;       1; 10240;  4096;  1024;    85899345920;           4322458;     19.87
+        9;       1; 10240;  4096;  1024;    85899345920;           4322474;     19.87
+
+Average                                                                         19.87
+=====================================================================================
+
+
+
+root@cheribsd-morello:~/llama.cpp/build-make-morello-cheribsd-hybrid # ./benchmark-matmult
+main: build = 2472 (0de9804f)
+main: built with clang version 14.0.0 (https://git.morello-project.org/morello/llvm-project.git 43105276d6d26e5a687a96ed84e20ad3d8b2fb89) for aarch64-unknown-linux-gnu
+Starting Test
+Allocating Memory of size 782237696 bytes, 746 MB
+Creating new tensors
+
+------ Test 1 - Matrix Mult via F32 code
+n_threads=1
+            m11: type = 0 (  f32) ne = 10240 x  4096 x     1, nb = (    4, 40960, 167772160) - Sum of tensor m11 is 41943040.00
+             m2: type = 0 (  f32) ne = 10240 x  1024 x     1, nb = (    4, 40960, 41943040) - Sum of tensor m2 is 20971520.00
+   gf->nodes[0]: type = 0 (  f32) ne =  4096 x  1024 x     1, nb = (    4, 16384, 16777216) - Sum of tensor gf->nodes[0] is 85899345920.00
+
+------ Test 2 - Matrix Mult via q4_1 code
+n_threads=1
+Matrix Multiplication of (10240,4096,1) x (10240,1024,1) - about  85.90 gFLOPS
+
+Iteration;NThreads; SizeX; SizeY; SizeZ; Required_FLOPS; Elapsed_u_Seconds; gigaFLOPS
+=====================================================================================
+        0;       1; 10240;  4096;  1024;    85899345920;           4462658;     19.25
+        1;       1; 10240;  4096;  1024;    85899345920;           4446388;     19.32
+        2;       1; 10240;  4096;  1024;    85899345920;           4446340;     19.32
+        3;       1; 10240;  4096;  1024;    85899345920;           4446089;     19.32
+        4;       1; 10240;  4096;  1024;    85899345920;           4446028;     19.32
+        5;       1; 10240;  4096;  1024;    85899345920;           4446150;     19.32
+        6;       1; 10240;  4096;  1024;    85899345920;           4446219;     19.32
+        7;       1; 10240;  4096;  1024;    85899345920;           4445707;     19.32
+        8;       1; 10240;  4096;  1024;    85899345920;           4446179;     19.32
+        9;       1; 10240;  4096;  1024;    85899345920;           4446160;     19.32
+
+Average                                                                         19.31
+=====================================================================================
+
+
+root@cheribsd-morello:~/llama.cpp/build-make-morello-cheribsd-purecap # ./llama-bench -m /root/llama.cpp/models/ggml-model-llama2_7B_chat-Q4_K_M.gguf -p "Building a website can be done in 10 simple steps:\nStep 1:" -n 400
+| model                          |       size |     params | backend    |    threads | test       |              t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ---------: | ---------- | ---------------: |
+| llama 7B Q4_K - Medium         |   3.80 GiB |     6.74 B | CPU        |          4 | tg 400     |      6.23 ± 0.01 |
+
+
+root@cheribsd-morello:~/llama.cpp/build-make-morello-cheribsd-hybrid # ./llama-bench -m /root/llama.cpp/models/ggml-model-llama2_7B_chat-Q4_K_M.gguf -p "Building a website can be done in 10 simple steps:\nStep 1:" -n 400
+| model                          |       size |     params | backend    |    threads | test       |              t/s |
+| ------------------------------ | ---------: | ---------: | ---------- | ---------: | ---------- | ---------------: |
+`1| llama 7B Q4_K - Medium         |   3.80 GiB |     6.74 B | CPU        |          4 | tg 400     |      6.21 ± 0.01 |
+
+
+
+
+
+
+root@cheribsd-morello:~/llama.cpp/build-make-morello-cheribsd-hybrid # ./batched-bench /root/llama.cpp/models/ggml-model-llama2_7B_chat-Q4_K_M.gguf 2048 0 999 128,256,512 128,256 1,2,4,8,16,32
+llama_model_loader: loaded meta data with 17 key-value pairs and 291 tensors from /root/llama.cpp/models/ggml-model-llama2_7B_chat-Q4_K_M.gguf (version GGUF V3 (latest))
+llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output.
+llama_model_loader: - kv   0:                       general.architecture str              = llama
+llama_model_loader: - kv   1:                               general.name str              = llama
+llama_model_loader: - kv   2:                           llama.vocab_size u32              = 32000
+llama_model_loader: - kv   3:                       llama.context_length u32              = 2048
+llama_model_loader: - kv   4:                     llama.embedding_length u32              = 4096
+llama_model_loader: - kv   5:                          llama.block_count u32              = 32
+llama_model_loader: - kv   6:                  llama.feed_forward_length u32              = 11008
+llama_model_loader: - kv   7:                 llama.rope.dimension_count u32              = 128
+llama_model_loader: - kv   8:                 llama.attention.head_count u32              = 32
+llama_model_loader: - kv   9:              llama.attention.head_count_kv u32              = 32
+llama_model_loader: - kv  10:     llama.attention.layer_norm_rms_epsilon f32              = 0.000001
+llama_model_loader: - kv  11:                          general.file_type u32              = 15
+llama_model_loader: - kv  12:                       tokenizer.ggml.model str              = llama
+llama_model_loader: - kv  13:                      tokenizer.ggml.tokens arr[str,32000]   = ["<unk>", "<s>", "</s>", "<0x00>", "<...
+llama_model_loader: - kv  14:                      tokenizer.ggml.scores arr[f32,32000]   = [0.000000, 0.000000, 0.000000, 0.0000...
+llama_model_loader: - kv  15:                  tokenizer.ggml.token_type arr[i32,32000]   = [2, 3, 3, 6, 6, 6, 6, 6, 6, 6, 6, 6, ...
+llama_model_loader: - kv  16:               general.quantization_version u32              = 2
+llama_model_loader: - type  f32:   65 tensors
+llama_model_loader: - type q4_K:  193 tensors
+llama_model_loader: - type q6_K:   33 tensors
+llm_load_vocab: special tokens definition check successful ( 259/32000 ).
+llm_load_print_meta: format           = GGUF V3 (latest)
+llm_load_print_meta: arch             = llama
+llm_load_print_meta: vocab type       = SPM
+llm_load_print_meta: n_vocab          = 32000
+llm_load_print_meta: n_merges         = 0
+llm_load_print_meta: n_ctx_train      = 2048
+llm_load_print_meta: n_embd           = 4096
+llm_load_print_meta: n_head           = 32
+llm_load_print_meta: n_head_kv        = 32
+llm_load_print_meta: n_layer          = 32
+llm_load_print_meta: n_rot            = 128
+llm_load_print_meta: n_embd_head_k    = 128
+llm_load_print_meta: n_embd_head_v    = 128
+llm_load_print_meta: n_gqa            = 1
+llm_load_print_meta: n_embd_k_gqa     = 4096
+llm_load_print_meta: n_embd_v_gqa     = 4096
+llm_load_print_meta: f_norm_eps       = 0.0e+00
+llm_load_print_meta: f_norm_rms_eps   = 1.0e-06
+llm_load_print_meta: f_clamp_kqv      = 0.0e+00
+llm_load_print_meta: f_max_alibi_bias = 0.0e+00
+llm_load_print_meta: f_logit_scale    = 0.0e+00
+llm_load_print_meta: n_ff             = 11008
+llm_load_print_meta: n_expert         = 0
+llm_load_print_meta: n_expert_used    = 0
+llm_load_print_meta: causal attn      = 1
+llm_load_print_meta: pooling type     = 0
+llm_load_print_meta: rope type        = 0
+llm_load_print_meta: rope scaling     = linear
+llm_load_print_meta: freq_base_train  = 10000.0
+llm_load_print_meta: freq_scale_train = 1
+llm_load_print_meta: n_yarn_orig_ctx  = 2048
+llm_load_print_meta: rope_finetuned   = unknown
+llm_load_print_meta: ssm_d_conv       = 0
+llm_load_print_meta: ssm_d_inner      = 0
+llm_load_print_meta: ssm_d_state      = 0
+llm_load_print_meta: ssm_dt_rank      = 0
+llm_load_print_meta: model type       = 7B
+llm_load_print_meta: model ftype      = Q4_K - Medium
+llm_load_print_meta: model params     = 6.74 B
+llm_load_print_meta: model size       = 3.80 GiB (4.84 BPW) 
+llm_load_print_meta: general.name     = llama
+llm_load_print_meta: BOS token        = 1 '<s>'
+llm_load_print_meta: EOS token        = 2 '</s>'
+llm_load_print_meta: UNK token        = 0 '<unk>'
+llm_load_print_meta: LF token         = 13 '<0x0A>'
+llm_load_tensors: ggml ctx size =    0.11 MiB
+llm_load_tensors:        CPU buffer size =  3891.24 MiB
+..................................................................................................
+llama_new_context_with_model: n_ctx      = 2048
+llama_new_context_with_model: n_batch    = 512
+llama_new_context_with_model: n_ubatch   = 512
+llama_new_context_with_model: freq_base  = 10000.0
+llama_new_context_with_model: freq_scale = 1
+llama_kv_cache_init:        CPU KV buffer size =  1024.00 MiB
+llama_new_context_with_model: KV self size  = 1024.00 MiB, K (f16):  512.00 MiB, V (f16):  512.00 MiB
+llama_new_context_with_model:        CPU  output buffer size =    62.50 MiB
+llama_new_context_with_model:        CPU compute buffer size =   164.00 MiB
+llama_new_context_with_model: graph nodes  = 1060
+llama_new_context_with_model: graph splits = 1
+
+main: n_kv_max = 2048, is_pp_shared = 0, n_gpu_layers = 999, n_threads = 4, n_threads_batch = 4
+
+|    PP |     TG |    B |   N_KV |   T_PP s | S_PP t/s |   T_TG s | S_TG t/s |      T s |    S t/s |
+|-------|--------|------|--------|----------|----------|----------|----------|----------|----------|
+|   128 |    128 |    1 |    256 |   16.781 |     7.63 |   20.868 |     6.13 |   37.649 |     6.80 |
+|   128 |    128 |    2 |    512 |   33.894 |     7.55 |   38.907 |     6.58 |   72.802 |     7.03 |
+|   128 |    128 |    4 |   1024 |   69.323 |     7.39 |   75.224 |     6.81 |  144.546 |     7.08 |
+|   128 |    128 |    8 |   2048 |  141.814 |     7.22 |  154.593 |     6.62 |  296.407 |     6.91 |
+|   128 |    256 |    1 |    384 |   16.774 |     7.63 |   42.332 |     6.05 |   59.106 |     6.50 |
+|   128 |    256 |    2 |    768 |   33.890 |     7.55 |   78.955 |     6.48 |  112.845 |     6.81 |
+|   128 |    256 |    4 |   1536 |   69.297 |     7.39 |  154.004 |     6.65 |  223.301 |     6.88 |
+|   256 |    128 |    1 |    384 |   33.900 |     7.55 |   21.419 |     5.98 |   55.319 |     6.94 |
+|   256 |    128 |    2 |    768 |   69.321 |     7.39 |   40.119 |     6.38 |  109.440 |     7.02 |
+|   256 |    128 |    4 |   1536 |  141.813 |     7.22 |   78.853 |     6.49 |  220.666 |     6.96 |
+|   256 |    256 |    1 |    512 |   33.897 |     7.55 |   43.444 |     5.89 |   77.342 |     6.62 |
+|   256 |    256 |    2 |   1024 |   69.313 |     7.39 |   81.475 |     6.28 |  150.788 |     6.79 |
+|   256 |    256 |    4 |   2048 |  141.815 |     7.22 |  160.896 |     6.36 |  302.710 |     6.77 |
+|   512 |    128 |    1 |    640 |   69.355 |     7.38 |   22.544 |     5.68 |   91.899 |     6.96 |
+|   512 |    128 |    2 |   1280 |  141.887 |     7.22 |   42.516 |     6.02 |  184.403 |     6.94 |
+|   512 |    256 |    1 |    768 |   69.358 |     7.38 |   45.617 |     5.61 |  114.975 |     6.68 |
+|   512 |    256 |    2 |   1536 |  141.903 |     7.22 |   86.360 |     5.93 |  228.262 |     6.73 |
+
+llama_print_timings:        load time =    2695.50 ms
+llama_print_timings:      sample time =       0.00 ms /     1 runs   (    0.00 ms per token,      inf tokens per second)
+llama_print_timings: prompt eval time = 2288321.14 ms / 15888 tokens (  144.03 ms per token,     6.94 tokens per second)
+llama_print_timings:        eval time =  196221.92 ms /  1152 runs   (  170.33 ms per token,     5.87 tokens per second)
+llama_print_timings:       total time = 2485158.05 ms / 17040 tokens
+
+
+
+
+
+root@cheribsd-morello:~/llama.cpp/build-make-morello-cheribsd-purecap # ./batched-bench /root/llama.cpp/models/ggml-model-llama2_7B_chat-Q4_K_M.gguf 2048 0 999 128,256,512 128,256 1,2,4,8,16,32
+llama_model_loader: loaded meta data with 17 key-value pairs and 291 tensors from /root/llama.cpp/models/ggml-model-llama2_7B_chat-Q4_K_M.gguf (version GGUF V3 (latest))
+llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output.
+llama_model_loader: - kv   0:                       general.architecture str              = llama
+llama_model_loader: - kv   1:                               general.name str              = llama
+llama_model_loader: - kv   2:                           llama.vocab_size u32              = 32000
+llama_model_loader: - kv   3:                       llama.context_length u32              = 2048
+llama_model_loader: - kv   4:                     llama.embedding_length u32              = 4096
+llama_model_loader: - kv   5:                          llama.block_count u32              = 32
+llama_model_loader: - kv   6:                  llama.feed_forward_length u32              = 11008
+llama_model_loader: - kv   7:                 llama.rope.dimension_count u32              = 128
+llama_model_loader: - kv   8:                 llama.attention.head_count u32              = 32
+llama_model_loader: - kv   9:              llama.attention.head_count_kv u32              = 32
+llama_model_loader: - kv  10:     llama.attention.layer_norm_rms_epsilon f32              = 0.000001
+llama_model_loader: - kv  11:                          general.file_type u32              = 15
+llama_model_loader: - kv  12:                       tokenizer.ggml.model str              = llama
+llama_model_loader: - kv  13:                      tokenizer.ggml.tokens arr[str,32000]   = ["<unk>", "<s>", "</s>", "<0x00>", "<...
+llama_model_loader: - kv  14:                      tokenizer.ggml.scores arr[f32,32000]   = [0.000000, 0.000000, 0.000000, 0.0000...
+llama_model_loader: - kv  15:                  tokenizer.ggml.token_type arr[i32,32000]   = [2, 3, 3, 6, 6, 6, 6, 6, 6, 6, 6, 6, ...
+llama_model_loader: - kv  16:               general.quantization_version u32              = 2
+llama_model_loader: - type  f32:   65 tensors
+llama_model_loader: - type q4_K:  193 tensors
+llama_model_loader: - type q6_K:   33 tensors
+llm_load_vocab: special tokens definition check successful ( 259/32000 ).
+llm_load_print_meta: format           = GGUF V3 (latest)
+llm_load_print_meta: arch             = llama
+llm_load_print_meta: vocab type       = SPM
+llm_load_print_meta: n_vocab          = 32000
+llm_load_print_meta: n_merges         = 0
+llm_load_print_meta: n_ctx_train      = 2048
+llm_load_print_meta: n_embd           = 4096
+llm_load_print_meta: n_head           = 32
+llm_load_print_meta: n_head_kv        = 32
+llm_load_print_meta: n_layer          = 32
+llm_load_print_meta: n_rot            = 128
+llm_load_print_meta: n_embd_head_k    = 128
+llm_load_print_meta: n_embd_head_v    = 128
+llm_load_print_meta: n_gqa            = 1
+llm_load_print_meta: n_embd_k_gqa     = 4096
+llm_load_print_meta: n_embd_v_gqa     = 4096
+llm_load_print_meta: f_norm_eps       = 0.0e+00
+llm_load_print_meta: f_norm_rms_eps   = 1.0e-06
+llm_load_print_meta: f_clamp_kqv      = 0.0e+00
+llm_load_print_meta: f_max_alibi_bias = 0.0e+00
+llm_load_print_meta: f_logit_scale    = 0.0e+00
+llm_load_print_meta: n_ff             = 11008
+llm_load_print_meta: n_expert         = 0
+llm_load_print_meta: n_expert_used    = 0
+llm_load_print_meta: causal attn      = 1
+llm_load_print_meta: pooling type     = 0
+llm_load_print_meta: rope type        = 0
+llm_load_print_meta: rope scaling     = linear
+llm_load_print_meta: freq_base_train  = 10000.0
+llm_load_print_meta: freq_scale_train = 1
+llm_load_print_meta: n_yarn_orig_ctx  = 2048
+llm_load_print_meta: rope_finetuned   = unknown
+llm_load_print_meta: ssm_d_conv       = 0
+llm_load_print_meta: ssm_d_inner      = 0
+llm_load_print_meta: ssm_d_state      = 0
+llm_load_print_meta: ssm_dt_rank      = 0
+llm_load_print_meta: model type       = 7B
+llm_load_print_meta: model ftype      = Q4_K - Medium
+llm_load_print_meta: model params     = 6.74 B
+llm_load_print_meta: model size       = 3.80 GiB (4.84 BPW) 
+llm_load_print_meta: general.name     = llama
+llm_load_print_meta: BOS token        = 1 '<s>'
+llm_load_print_meta: EOS token        = 2 '</s>'
+llm_load_print_meta: UNK token        = 0 '<unk>'
+llm_load_print_meta: LF token         = 13 '<0x0A>'
+llm_load_tensors: ggml ctx size =    0.16 MiB
+llm_load_tensors:        CPU buffer size =  3891.24 MiB
+..................................................................................................
+llama_new_context_with_model: n_ctx      = 2048
+llama_new_context_with_model: n_batch    = 512
+llama_new_context_with_model: n_ubatch   = 512
+llama_new_context_with_model: freq_base  = 10000.0
+llama_new_context_with_model: freq_scale = 1
+llama_kv_cache_init:        CPU KV buffer size =  1024.00 MiB
+llama_new_context_with_model: KV self size  = 1024.00 MiB, K (f16):  512.00 MiB, V (f16):  512.00 MiB
+llama_new_context_with_model:        CPU  output buffer size =    62.50 MiB
+llama_new_context_with_model:        CPU compute buffer size =   164.00 MiB
+llama_new_context_with_model: graph nodes  = 1060
+llama_new_context_with_model: graph splits = 1
+
+main: n_kv_max = 2048, is_pp_shared = 0, n_gpu_layers = 999, n_threads = 4, n_threads_batch = 4
+
+|    PP |     TG |    B |   N_KV |   T_PP s | S_PP t/s |   T_TG s | S_TG t/s |      T s |    S t/s |
+|-------|--------|------|--------|----------|----------|----------|----------|----------|----------|
+|   128 |    128 |    1 |    256 |   16.935 |     7.56 |   20.869 |     6.13 |   37.803 |     6.77 |
+|   128 |    128 |    2 |    512 |   34.204 |     7.48 |   38.809 |     6.60 |   73.014 |     7.01 |
+|   128 |    128 |    4 |   1024 |   69.929 |     7.32 |   75.547 |     6.78 |  145.475 |     7.04 |
+|   128 |    128 |    8 |   2048 |  142.971 |     7.16 |  155.657 |     6.58 |  298.628 |     6.86 |
+|   128 |    256 |    1 |    384 |   16.929 |     7.56 |   42.292 |     6.05 |   59.221 |     6.48 |
+|   128 |    256 |    2 |    768 |   34.197 |     7.49 |   79.053 |     6.48 |  113.249 |     6.78 |
+|   128 |    256 |    4 |   1536 |   69.908 |     7.32 |  154.778 |     6.62 |  224.686 |     6.84 |
+|   256 |    128 |    1 |    384 |   34.200 |     7.49 |   21.430 |     5.97 |   55.631 |     6.90 |
+|   256 |    128 |    2 |    768 |   69.946 |     7.32 |   40.242 |     6.36 |  110.188 |     6.97 |
+|   256 |    128 |    4 |   1536 |  142.934 |     7.16 |   79.211 |     6.46 |  222.145 |     6.91 |
+|   256 |    256 |    1 |    512 |   34.207 |     7.48 |   43.275 |     5.92 |   77.482 |     6.61 |
+|   256 |    256 |    2 |   1024 |   69.937 |     7.32 |   81.710 |     6.27 |  151.647 |     6.75 |
+|   256 |    256 |    4 |   2048 |  142.942 |     7.16 |  161.653 |     6.33 |  304.594 |     6.72 |
+|   512 |    128 |    1 |    640 |   69.959 |     7.32 |   22.553 |     5.68 |   92.512 |     6.92 |
+|   512 |    128 |    2 |   1280 |  143.038 |     7.16 |   42.646 |     6.00 |  185.684 |     6.89 |
+|   512 |    256 |    1 |    768 |   69.969 |     7.32 |   45.610 |     5.61 |  115.579 |     6.64 |
+|   512 |    256 |    2 |   1536 |  143.054 |     7.16 |   86.454 |     5.92 |  229.507 |     6.69 |
+
+llama_print_timings:        load time =    2732.65 ms
+llama_print_timings:      sample time =       0.00 ms /     1 runs   (    0.00 ms per token,      inf tokens per second)
+llama_print_timings: prompt eval time = 2303117.03 ms / 15888 tokens (  144.96 ms per token,     6.90 tokens per second)
+llama_print_timings:        eval time =  196022.70 ms /  1152 runs   (  170.16 ms per token,     5.88 tokens per second)
+llama_print_timings:       total time = 2499784.58 ms / 17040 tokens
+
+

@@ -1,0 +1,39 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+# benchmark="525.x264_r" | "625.x264_s"
+
+# clean + remove the corresponding executables.    
+runcpu --action trash --config ${_FREEBSD_CFG} "${benchmark}"
+
+for size in ${SIZES[@]}; do
+   # clean + remove the corresponding executables.    
+   runcpu --action clobber --size ${size} --config ${_CHERI_PURECAP_CFG} "${benchmark}"
+   # for preparing the run directory and input files.
+   runcpu_rename --action runsetup --size ${size} --config ${_FREEBSD_CFG} "${benchmark}"
+done
+
+declare -A location_config=(
+  [hybrid]=${_CHERI_HYBRID_CFG}
+  [purecap]=${_CHERI_PURECAP_CFG}
+  [purecap-benchmark]=${_CHERI_BENCHMARK_CFG}
+)
+
+for key in "${!location_config[@]}"; do
+   value="${location_config[$key]}"
+
+   for size in ${SIZES[@]}; do
+      runcpu --action clobber --size ${size} --config ${value} "${benchmark}"
+      runcpu_rename --action runsetup --size ${size} --config ${value} "${benchmark}"
+      cp ${_SPECCPU_PATH}/${benchmark}/run/run_base_${size}_ubuntu-x86-llvm14.0000/{BuckBunny.yuv,compare.cmd,dataDec.txt,log.dec,speccmds.cmd} \
+         ${_SPECCPU_PATH}/${benchmark}/run/run_base_${size}_cheribsd-morello-${key}-cheribuild_llvm.0000/
+
+      sed -i "s/ubuntu-x86-llvm14/cheribsd-morello-${key}-cheribuild_llvm/g" \
+         ${_SPECCPU_PATH}/${benchmark}/run/run_base_${size}_cheribsd-morello-${key}-cheribuild_llvm.0000/compare.cmd
+      sed -i "s/ubuntu-x86-llvm14/cheribsd-morello-${key}-cheribuild_llvm/g" \
+         ${_SPECCPU_PATH}/${benchmark}/run/run_base_${size}_cheribsd-morello-${key}-cheribuild_llvm.0000/speccmds.cmd
+   done
+done
+
+# finished
+printf "\n\nSuccessfully Done! (Ignore 'ERROR: Copying input files to first run directory')\n\n"

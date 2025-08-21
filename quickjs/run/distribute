@@ -1,0 +1,12 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+ssh ${_CHERI_MORELLO_CONNECT} "mkdir -p ${_CHERI_MORELLO_RUN_DIR} && rm -rf ${_CHERI_MORELLO_RUN_DIR}/*"
+
+scp -r ${_QUICKJS_PATH}/build-cheribsd-morello-purecap ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}
+scp -r ${_QUICKJS_PATH}/build-cheribsd-morello-purecap-benchmark ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}
+scp -r ${_QUICKJS_PATH}/build-cheribsd-morello-hybrid ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}
+
+scp -r ${_QUICKJS_PATH}/test262 ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}
+scp -r ${_QUICKJS_PATH}/test262_exclude.txt ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}
+scp -r ${_QUICKJS_PATH}/test262.conf ${_CHERI_MORELLO_CONNECT}:${_CHERI_MORELLO_RUN_DIR}

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+gcc -O2 -DSQLITE_ENABLE_JSON1 speedtest1.c sqlite3.c  -o speedtest1 -lpthread -ldl -lm
+
+./speedtest1 --verify --testset main,cte,rtree,orm,fp,star,app,debug --script suite.sql
+
+# time sqlite3 test.db < suite.sql

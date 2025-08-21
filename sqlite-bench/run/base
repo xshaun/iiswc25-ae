@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Path & Variables
+_PROJECT_ROOT="/home/iiswc/workspace/workload-characterization-on-morello"
+_SQLITE_BENCH_PATH="/home/iiswc/workspace/sqlite-bench"
+
+# morello
+_CHERI_MORELLO_CONNECT_IP=${1:-192.168.1.102}
+_CHERI_MORELLO_CONNECT="iiswc@${_CHERI_MORELLO_CONNECT_IP}"
+_CHERI_MORELLO_CONNECT_ROOT="root@${_CHERI_MORELLO_CONNECT_IP}"
+_CHERI_MORELLO_RUN_DIR="/home/iiswc/sqlite-bench"
+
+RUN_FOLDERS=("build-cheribsd-morello-hybrid" "build-cheribsd-morello-purecap" "build-cheribsd-morello-purecap-benchmark")
+BINARY_NAMES=("sqlite3")
+
+# project and expertiment results
+_RESULTS_FOLDER="${2:-results/sqlite-bench}"

@@ -1,0 +1,24 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+declare -A FILTERS=(
+    ["build-cheribsd-morello-hybrid"]="'A64, version 1 (FreeBSD)'"
+    ["build-cheribsd-morello-purecap-benchmark"]="'pure-capability benchmark ABI'"
+    ["build-cheribsd-morello-purecap"]="'C64, CheriABI, version 1 (SYSV)'"
+);
+
+rm -f /tmp/quickjs_check-abi
+
+for run_folder in "${RUN_FOLDERS[@]}"; do
+    for binary_name in "${BINARY_NAMES[@]}"; do
+        command="file  ${_CHERI_MORELLO_RUN_DIR}/${run_folder}/bin/${binary_name} | grep -q ${FILTERS[$run_folder]}"
+
+        # echo ${command}
+        echo ssh ${_CHERI_MORELLO_CONNECT} "\"${command}\"" >> /tmp/quickjs_check-abi
+        echo "if [ \$? -ne 0 ]; then echo \'${run_folder}/bin/${binary_name} may suffer wrong abis.\' ; fi " >> /tmp/quickjs_check-abi  
+    done
+done
+
+/bin/bash /tmp/quickjs_check-abi
+printf "\nAll binaries have checked ABIs (no output means success)\n\n" 
+rm -f /tmp/quickjs_check-abi

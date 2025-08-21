@@ -1,0 +1,28 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+set -euo pipefail
+
+mkdir -p ${_MATRIX_MULTIPLY_PATH}
+mkdir -p ${_MATRIX_MULTIPLY_PATH}/build-cheribsd-morello-purecap
+mkdir -p ${_MATRIX_MULTIPLY_PATH}/build-cheribsd-morello-hybrid
+mkdir -p ${_MATRIX_MULTIPLY_PATH}/build-cheribsd-morello-purecap-benchmark
+
+cp ${_CONFIGS_FOLDER}/../matrix-multiply/src/multiply-bench.cpp ${_MATRIX_MULTIPLY_PATH}/multiply-bench.cpp
+
+cd ${_MATRIX_MULTIPLY_PATH}
+
+declare -A FILTERS=(
+    ["purecap"]="${_CHERI_PURECAP_CFG}"
+    ["hybrid"]="${_CHERI_HYBRID_CFG}"
+    ["purecap-benchmark"]="${_CHERI_BENCHMARK_CFG}"
+);
+
+for abi in purecap purecap-benchmark hybrid; do
+    for opt in 0 1 2 3; do
+        ${LLVM_DIR}/bin/clang++ \
+            --config ${FILTERS[$abi]} \
+            -O${opt} \
+            -o build-cheribsd-morello-${abi}/multiply-bench-O${opt} \
+            multiply-bench.cpp
+    done
+done

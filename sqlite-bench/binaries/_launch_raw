@@ -1,0 +1,4 @@
+if [ -f test.db ]; then   
+    rm test.db
+fi
+../sqlite3 test.db < ../../suite.sql >> run.out 2>&1 && rm test.db

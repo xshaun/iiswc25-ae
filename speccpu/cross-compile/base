@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Path & Variables
+_SPECCPU_PATH="/home/iiswc/workspace/SPEC/cpu2017-1.1.0/benchspec/CPU"
+_CONFIGS_FOLDER="/home/iiswc/workspace/workload-characterization-on-morello/configs/speccpu"
+_CHERI_PURECAP_CFG="${_CONFIGS_FOLDER}/morello-purecap-clang-linux-x86.cfg"
+_CHERI_HYBRID_CFG="${_CONFIGS_FOLDER}/morello-hybrid-clang-linux-x86.cfg"
+_CHERI_BENCHMARK_CFG="${_CONFIGS_FOLDER}/morello-purecap-benchmark-clang-linux-x86.cfg"
+_FREEBSD_CFG="${_CONFIGS_FOLDER}/clang-linux-x86.cfg"
+
+# -------
+# test is for debugging, ref is for evaluation
+SIZES=("test" "train" "ref") 
+
+runcpu_rename() {
+    runcpu "$@"
+    find ${_SPECCPU_PATH}/${benchmark}/run/ -type d -name "*_refrate_*" | while IFS= read -r dir; do
+        # Construct the new directory name by replacing 'oldname' with 'newname'
+        newdir="${dir//_refrate_/_ref_}"
+        # Rename the directory
+        mv "$dir" "$newdir"
+        sed -i 's/_refrate_/_ref_/g' "$newdir/compare.cmd"
+        sed -i 's/_refrate_/_ref_/g' "$newdir/speccmds.cmd"
+    done
+    find ${_SPECCPU_PATH}/${benchmark}/run/ -type d -name "*_refspeed_*" | while IFS= read -r dir; do
+        # Construct the new directory name by replacing 'oldname' with 'newname'
+        newdir="${dir//_refspeed_/_ref_}"
+        # Rename the directory
+        mv "$dir" "$newdir"
+        sed -i 's/_refspeed_/_ref_/g' "$newdir/compare.cmd"
+        sed -i 's/_refspeed_/_ref_/g' "$newdir/speccmds.cmd"
+    done
+}

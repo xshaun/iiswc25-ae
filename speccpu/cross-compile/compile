@@ -1,0 +1,120 @@
+#!/bin/bash
+. "$(dirname "$0")/base"
+
+# source the SPEC environment
+cd "${_SPECCPU_PATH}/../../" && source shrc && cd -
+
+benchmarks=(
+    "502.gcc_r"
+    "505.mcf_r"
+    "520.omnetpp_r"
+    "523.xalancbmk_r"
+    "525.x264_r"
+    "531.deepsjeng_r"
+    "541.leela_r"
+    "557.xz_r"
+    "508.namd_r"
+    "510.parest_r"
+    "511.povray_r"
+    "519.lbm_r"
+    "538.imagick_r"
+    "544.nab_r"
+    "997.specrand_fr"
+    "602.gcc_s"
+    "605.mcf_s"
+    "620.omnetpp_s"
+    "623.xalancbmk_s"
+    "625.x264_s"
+    "631.deepsjeng_s"
+    "641.leela_s"
+    "657.xz_s"   
+    "619.lbm_s"
+    "638.imagick_s"
+    "644.nab_s"
+)
+
+
+cross_compile() {
+    local action=$1
+    local config=$2
+    local benchmark=$3
+
+    case "$benchmark" in
+    "525.x264_r" | "525")
+       echo "Please run '525' file"; exit 1
+        ;;
+    "625.x264_r" | "625")
+       echo "Please run '625' file"; exit 1
+        ;;
+    "520.omnetpp_r" | "620.omnetpp_s")
+        cp -f "$(dirname "$0")/520.omnetpp_r-platmisc.h.fixed" \
+            "${_SPECCPU_PATH}/520.omnetpp_r/src/simulator/platdep/platmisc.h"
+        ;;
+    "523.xalancbmk_r" | "623.xalancbmk_s")
+        cp -f "$(dirname "$0")/523.xalancbmk_r-LinuxPlatformUtils.cpp.fixed" \
+            "${_SPECCPU_PATH}/523.xalancbmk_r/src/LinuxPlatformUtils.cpp"
+        ;;
+    "619.lbm_s" | "619")
+        cp -f "$(dirname "$0")/619.lbm_s-lbm.c.pthreads" \
+            "${_SPECCPU_PATH}/519.lbm_r/src/lbm.c"
+        cp -f "$(dirname "$0")/619.lbm_s-lbm_1d_array.h" \
+            "${_SPECCPU_PATH}/519.lbm_r/src/lbm_1d_array.h"
+        ;;
+    "519.lbm_r" | "519")
+        cp -f "$(dirname "$0")/519.lbm_r-lbm.c.org" \
+            "${_SPECCPU_PATH}/519.lbm_r/src/lbm.c"
+        cp -f "$(dirname "$0")/519.lbm_r-lbm_1d_array.h" \
+            "${_SPECCPU_PATH}/519.lbm_r/src/lbm_1d_array.h"
+        ;;
+    "657.xz_s" | "657")
+        cp -f "$(dirname "$0")/657.xz_s-pxz.c.pthreads" \
+            "${_SPECCPU_PATH}/557.xz_r/src/pxz.c"
+        ;;
+    "557.xz_r" | "557")
+        cp -f "$(dirname "$0")/557.xz_r-pxz.c.org" \
+            "${_SPECCPU_PATH}/557.xz_r/src/pxz.c"
+        ;;
+    esac
+
+    # Clean + remove the corresponding executables.
+    _SIZE=$(IFS=','; echo "${SIZES[*]}")
+    runcpu --action clobber --size "${_SIZE}" --config "${config}" "${benchmark}"
+    runcpu_rename --action "${action}" --size "${_SIZE}" --config "${config}" "${benchmark}"
+}
+
+
+cross_compile_all() {
+    local benchmark=$1
+    case "$benchmark" in
+    "525.x264_r" | "625.x264_s")
+        . "$(dirname "$0")/525"; return 0
+        ;;
+    esac
+
+    # Remove run and build directories for all users and all labels for the specified benchmarks.
+    cross_compile trash ${_CHERI_PURECAP_CFG} ${benchmark}
+
+    # cross_compile runsetup ${_FREEBSD_CFG} ${benchmark}
+    cross_compile runsetup ${_CHERI_PURECAP_CFG} ${benchmark}
+    cross_compile runsetup ${_CHERI_HYBRID_CFG} ${benchmark}
+    cross_compile runsetup ${_CHERI_BENCHMARK_CFG} ${benchmark}
+}
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <benchmark>"
+    exit 1
+fi
+
+if [[ $1 == 'all' ]]; then
+    for bench in "${benchmarks[@]}"; do
+        cross_compile_all ${bench}
+    done
+    exit 0
+fi
+
+if [[ ! " ${benchmarks[@]} " =~ " $1 " ]]; then
+    echo "Benchmark $1 not found"
+    exit 1
+fi
+
+cross_compile_all $1
