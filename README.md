@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16923143.svg)](https://doi.org/10.5281/zenodo.16923143)
+
 # Artifact Evaluation (AE) for ``Sweet or Sour CHERI: Performance Characterization of the Arm Morello Platform", IISWC 2025.
 
 This repository contains the artifacts and workflows necessary to reproduce the experimental results and figures presented in the IISWC 2025 paper by X. Sun, J. Singer, and Z. Wang. 
