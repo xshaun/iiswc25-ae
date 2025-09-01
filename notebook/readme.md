@@ -54,7 +54,7 @@ env AUTOSSH_GATETIME=0 \
     xshaun@35.193.148.121
 ```
 
-Configure ssh inside the container:
+Configure ssh inside the container:r
 ```bash
 Host *
   Port 2201
@@ -62,6 +62,14 @@ Host *
 
 Run the following command inside the container:
 ```bash
-ssh-copy-id root@127.0.0.1
-ssh-copy-id scxs@127.0.0.1
+$ ssh-copy-id root@127.0.0.1
+$ ssh-copy-id scxs@127.0.0.1
+```
+
+```bash
+# Everyone read/write: 
+$ chmod 666 filename
+
+# Everyone read-only: 
+$ chmod 444 filename
 ```
