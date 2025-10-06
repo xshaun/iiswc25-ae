@@ -1,4 +1,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16923143.svg)](https://doi.org/10.5281/zenodo.16923143)
+<img src="https://sysartifacts.github.io/images/acm_available_1.1.png" alt="available" width="40" height="40">
+<img src="https://sysartifacts.github.io/images/acm_functional_1.1.png" alt="functional" width="40" height="40">
+<img src="https://sysartifacts.github.io/images/acm_reproduced_1.1.png" alt="reproduced" width="40" height="40">
 
 # Artifact Evaluation (AE) for ``Sweet or Sour CHERI: Performance Characterization of the Arm Morello Platform", IISWC 2025.
 
